@@ -6,7 +6,7 @@
     android:orientation="horizontal">
 
     <LinearLayout
-        android:id="@+id/linearlayout_tab1"
+        android:id="@+id/linearlayout_tab_a"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -21,17 +21,17 @@
             android:clickable="false" />
 
         <TextView
-            android:id="@+id/txt_home"
+            android:id="@+id/txt_tab_a"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="首页"
+            android:text="电影"
             android:textColor="#707070"
             android:textSize="14sp" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearlayout_tab2"
+        android:id="@+id/linearlayout_tab_b"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -45,17 +45,17 @@
             android:clickable="false" />
 
         <TextView
-            android:id="@+id/txt_social"
+            android:id="@+id/txt_tab_b"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="社区"
+            android:text="今天"
             android:textColor="#707070"
             android:textSize="14sp" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearlayout_tab3"
+        android:id="@+id/linearlayout_tab_c"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -70,7 +70,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearlayout_tab4"
+        android:id="@+id/linearlayout_tab_d"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -84,17 +84,17 @@
             android:clickable="false" />
 
         <TextView
-            android:id="@+id/txt_client"
+            android:id="@+id/txt_tab_d"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="客服"
+            android:text="厦门"
             android:textColor="#707070"
             android:textSize="14sp" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearlayout_tab5"
+        android:id="@+id/linearlayout_tab_e"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -108,11 +108,11 @@
             android:clickable="false" />
 
         <TextView
-            android:id="@+id/txt_mine"
+            android:id="@+id/txt_tab_e"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="我的"
+            android:text="未知"
             android:textColor="#707070"
             android:textSize="14sp" />
     </LinearLayout>

@@ -17,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.leday.Impl.ListViewHightImpl;
 import com.leday.R;
 import com.leday.adapter.weatheradapter;
 import com.leday.entity.Weather;
@@ -65,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("点我", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Toast.makeText(MainActivity.this, "I am leday", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(MainActivity.this, TabActivity.class));
                             }
                         }).show();
@@ -124,9 +124,9 @@ public class MainActivity extends AppCompatActivity {
                 weather.setWeek(obj.getString("week"));
                 weather.setWind(obj.getString("wind"));
                 weatherList.add(weather);
-                Log.e("future", "futureinfo :" + weather.toString());
+//                Log.e("future", "futureinfo :" + weather.toString());
             }
-            Log.e("future", "futureinfo :" + weatherList);
+//            Log.e("future", "futureinfo :" + weatherList);
         } catch (JSONException e) {
             e.printStackTrace();
         }

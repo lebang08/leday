@@ -15,7 +15,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.leday.Impl.ListViewHightImpl;
 import com.leday.R;
+import com.leday.Util.ListViewHightHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,7 +47,7 @@ public class FragmentA extends Fragment {
     }
 
     private void initEvent() {
-        StringRequest stringReques = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
+        StringRequest filmrequest = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Dosuccess(response);
@@ -64,9 +66,9 @@ public class FragmentA extends Fragment {
 //                return hashMap;
 //            }
 //        };
-        stringReques.setTag("GET");
+        filmrequest.setTag("GET");
 //        MyApplication.getHttpQueue().add(stringReques);
-        Volley.newRequestQueue(getActivity()).add(stringReques);
+        Volley.newRequestQueue(getActivity()).add(filmrequest);
     }
 
     private void Dosuccess(String response) {
@@ -88,33 +90,6 @@ public class FragmentA extends Fragment {
         }
         mAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, mDataList);
         mListView.setAdapter(mAdapter);
-        setListViewHeightBasedOnChildren(mListView);
-    }
-
-    /**
-     * 解决嵌套ListView 和 Scrollview的问题
-     */
-    public void setListViewHeightBasedOnChildren(ListView listView) {
-        // 获取ListView对应的Adapter
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null) {
-            return;
-        }
-
-        int totalHeight = 0;
-        for (int i = 0, len = listAdapter.getCount(); i < len; i++) {
-            // listAdapter.getCount()返回数据项的数目
-            View listItem = listAdapter.getView(i, null, listView);
-            // 计算子项View 的宽高
-            listItem.measure(0, 0);
-            // 统计所有子项的总高度
-            totalHeight += listItem.getMeasuredHeight();
-        }
-
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        // listView.getDividerHeight()获取子项间分隔符占用的高度
-        // params.height最后得到整个ListView完整显示需要的高度
-        listView.setLayoutParams(params);
+        new ListViewHightImpl(mListView).setListViewHeightBasedOnChildren();
     }
 }
