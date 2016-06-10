@@ -19,6 +19,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.leday.Impl.ListViewHightImpl;
 import com.leday.R;
+import com.leday.Util.MySingleton;
 import com.leday.adapter.weatheradapter;
 import com.leday.entity.Weather;
 
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void getJson() {
 //        String parseString = new String(URL.getBytes("ISO-8859-1"), "utf-8");
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
+        StringRequest weatherRequest = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 DoSuccess(response);
@@ -95,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
 //                return hashMap;
 //            }
 //        };
-        stringRequest.setTag("GET");
-        Volley.newRequestQueue(this).add(stringRequest);
+        weatherRequest.setTag("GET");
+        MySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(weatherRequest);
     }
 
     private void DoSuccess(String response) {

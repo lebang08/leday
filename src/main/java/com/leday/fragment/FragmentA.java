@@ -18,6 +18,7 @@ import com.android.volley.toolbox.Volley;
 import com.leday.Impl.ListViewHightImpl;
 import com.leday.R;
 import com.leday.Util.ListViewHightHelper;
+import com.leday.Util.MySingleton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -68,7 +69,7 @@ public class FragmentA extends Fragment {
 //        };
         filmrequest.setTag("GET");
 //        MyApplication.getHttpQueue().add(stringReques);
-        Volley.newRequestQueue(getActivity()).add(filmrequest);
+        MySingleton.getInstance(this.getActivity().getApplicationContext()).addToRequestQueue(filmrequest);
     }
 
     private void Dosuccess(String response) {

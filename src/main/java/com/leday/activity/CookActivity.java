@@ -47,39 +47,10 @@ public class CookActivity extends AppCompatActivity implements AdapterView.OnIte
 
     public void getJson() {
 //        String parseString = new String(URL.getBytes("ISO-8859-1"), "utf-8");
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_COOK, new Response.Listener<String>() {
+        StringRequest cookRequest = new StringRequest(Request.Method.GET, URL_COOK, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-//                Log.e("cook0", response);
-                JSONObject obj, obj1, obj2;
-                JSONArray arr, arr1;
-                String mCookname;
-                try {
-                    obj = new JSONObject(response);
-//                    Log.e("cook1", obj.toString());
-                    obj = obj.getJSONObject("result");
-//                    Log.e("cook2", obj.toString());
-                    arr = obj.getJSONArray("childs");
-//                    Log.e("cook3", arr.toString());
-                    for (int i = 0; i <= arr.length(); i++) {
-                        obj = arr.getJSONObject(i);
-                        Log.e("cook4", obj.toString());
-                        arr1 = obj.getJSONArray("childs");
-                        Log.e("cook5", arr1.toString());
-                        for (int j = 0; j <= arr1.length(); j++) {
-                            obj1 = arr1.getJSONObject(j);
-                            Log.e("cook6", obj1.toString());
-                            obj2 = obj1.getJSONObject("categoryInfo");
-                            Log.e("cook7", obj2.toString());
-                            mCookname = obj2.getString("name");
-                            mCategoryList.add(mCookname);
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                mCookadapter = new ArrayAdapter<>(CookActivity.this, android.R.layout.simple_list_item_1, mCategoryList);
-                mListView.setAdapter(mCookadapter);
+                Dosuccess(response);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -95,8 +66,41 @@ public class CookActivity extends AppCompatActivity implements AdapterView.OnIte
 //                return hashMap;
 //            }
 //        };
-//        stringRequest.setTag("post");
-        Volley.newRequestQueue(this).add(stringRequest);
+        cookRequest.setTag("post");
+        Volley.newRequestQueue(this).add(cookRequest);
+    }
+
+    private void Dosuccess(String response) {
+        //                Log.e("cook0", response);
+        JSONObject obj, obj1, obj2;
+        JSONArray arr, arr1;
+        String mCookname;
+        try {
+            obj = new JSONObject(response);
+//                    Log.e("cook1", obj.toString());
+            obj = obj.getJSONObject("result");
+//                    Log.e("cook2", obj.toString());
+            arr = obj.getJSONArray("childs");
+//                    Log.e("cook3", arr.toString());
+            for (int i = 0; i <= arr.length(); i++) {
+                obj = arr.getJSONObject(i);
+                Log.e("cook4", obj.toString());
+                arr1 = obj.getJSONArray("childs");
+                Log.e("cook5", arr1.toString());
+                for (int j = 0; j <= arr1.length(); j++) {
+                    obj1 = arr1.getJSONObject(j);
+                    Log.e("cook6", obj1.toString());
+                    obj2 = obj1.getJSONObject("categoryInfo");
+                    Log.e("cook7", obj2.toString());
+                    mCookname = obj2.getString("name");
+                    mCategoryList.add(mCookname);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mCookadapter = new ArrayAdapter<>(CookActivity.this, android.R.layout.simple_list_item_1, mCategoryList);
+        mListView.setAdapter(mCookadapter);
     }
 
     @Override

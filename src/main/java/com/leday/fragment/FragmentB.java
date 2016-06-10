@@ -18,6 +18,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.leday.Impl.ListViewHightImpl;
 import com.leday.R;
+import com.leday.Util.MySingleton;
 import com.leday.activity.CookActivity;
 import com.leday.activity.TodayActivity;
 import com.leday.entity.Today;
@@ -75,7 +76,7 @@ public class FragmentB extends Fragment implements AdapterView.OnItemClickListen
             }
         });
         todayrequest.setTag("GET");
-        Volley.newRequestQueue(getActivity()).add(todayrequest);
+        MySingleton.getInstance(this.getActivity().getApplicationContext()).addToRequestQueue(todayrequest);
     }
 
     //请求成功的处理
