@@ -20,8 +20,8 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
-            app:title="厦门"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:title="厦门">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -34,68 +34,78 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="80dp">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:gravity="center" />
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:text="温度"
-                    android:layout_weight="1"/>
+                    android:text="温度" />
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:text="天气"
-                    android:layout_weight="1"/>
+                    android:text="天气" />
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:text="空气质量"
-                    android:layout_weight="1"/>
+                    android:text="空气质量" />
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:gravity="center" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="140dp">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:gravity="center" />
+
                 <TextView
                     android:id="@+id/txt_temper"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:gravity="center" />
+
                 <TextView
                     android:id="@+id/txt_weather"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:gravity="center" />
 
                 <TextView
                     android:id="@+id/txt_air"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:gravity="center" />
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:gravity="center" />
             </LinearLayout>
 
         </android.support.design.widget.CollapsingToolbarLayout>

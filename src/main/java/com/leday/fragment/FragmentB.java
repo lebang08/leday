@@ -57,7 +57,6 @@ public class FragmentB extends Fragment implements AdapterView.OnItemClickListen
         mListView.setOnItemClickListener(this);
     }
 
-
     public void getJson() {
         //获取时间,月和日
         int localMonth = mCalendar.get(Calendar.MONTH);

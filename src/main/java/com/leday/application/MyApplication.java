@@ -8,17 +8,17 @@ import com.android.volley.toolbox.Volley;
 /**
  * Created by Administrator on 2016/6/8.
  */
-//public class MyApplication extends Application {
-//
-//    public static RequestQueue mQueue;
-//
-//    @Override
-//    public void onCreate() {
-//        super.onCreate();
-//        mQueue = Volley.newRequestQueue(getApplicationContext());
-//    }
-//
-//    public static RequestQueue getHttpQueue() {
-//        return mQueue;
-//    }
-//}
+public class MyApplication extends Application {
+
+    public static RequestQueue mQueue;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mQueue = Volley.newRequestQueue(getApplicationContext());
+    }
+
+    public static RequestQueue getHttpQueue() {
+        return mQueue;
+    }
+}

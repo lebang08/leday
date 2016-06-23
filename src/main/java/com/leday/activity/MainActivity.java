@@ -2,8 +2,11 @@ package com.leday.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -35,10 +38,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTemper, mWheather, mAir;
     private FloatingActionButton fab;
     private ListView mList;
+    private List<Weather> weatherList = new ArrayList<Weather>();
 
     private String URL = "http://apicloud.mob.com/v1/weather/query?key=135b8ce813980&city=%E5%8E%A6%E9%97%A8";
-    private List<Weather> weatherList = new ArrayList<Weather>();
-    private Weather weather;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
             arr = obj.getJSONArray("future");
             for (int i = 1; i <= arr.length() - 1; i++) {
                 obj = arr.getJSONObject(i);
-                weather = new Weather();
+                Weather weather = new Weather();
                 weather.setDate(obj.getString("date"));
                 weather.setDayTime(obj.getString("dayTime"));
                 weather.setNight(obj.getString("night"));

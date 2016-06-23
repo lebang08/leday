@@ -9,18 +9,17 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.leday.activity.TodayActivity">
 
-
-    <ImageView
-        android:id="@+id/img_activity_today"
+    <ViewFlipper
+        android:id="@+id/viewflipper_activity_today"
         android:layout_width="match_parent"
         android:layout_height="240dp"
-        android:background="@mipmap/ic_launcher"
         android:scaleType="fitXY" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/img_activity_today">
+        android:layout_below="@id/viewflipper_activity_today"
+        android:layout_marginTop="16dp">
 
         <TextView
             android:id="@+id/content_activity_today"
@@ -29,5 +28,4 @@
             android:textSize="18sp" />
 
     </ScrollView>
-
 </RelativeLayout>
