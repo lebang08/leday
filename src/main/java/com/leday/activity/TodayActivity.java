@@ -17,6 +17,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.leday.R;
 import com.leday.Util.LogUtil;
 import com.leday.Util.MySingleton;
+import com.leday.application.MyApplication;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,6 +66,7 @@ public class TodayActivity extends AppCompatActivity {
         todayactivityrequest.setTag("GET");
 //        Google官方推荐的单例模式请求队列
         MySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(todayactivityrequest);
+//        MyApplication.getHttpQueue().add(todayactivityrequest);
     }
 
     private void Dosuccess(String response) {

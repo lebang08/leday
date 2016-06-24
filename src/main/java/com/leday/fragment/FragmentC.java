@@ -2,6 +2,8 @@ package com.leday.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +19,9 @@ import com.leday.adapter.StarAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentC extends Fragment implements AdapterView.OnItemClickListener {
+public class FragmentC extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener {
+
+    private FloatingActionButton mFab;
 
     private ListView mListView;
     private List<String> mData = new ArrayList<>();
@@ -28,12 +32,19 @@ public class FragmentC extends Fragment implements AdapterView.OnItemClickListen
         View view = inflater.inflate(R.layout.fragment_c, container, false);
 
         initView(view);
+        DoEvent();
         return view;
     }
 
     private void initView(View view) {
+        mFab = (FloatingActionButton) view.findViewById(R.id.fab_fragment_c);
         mListView = (ListView) view.findViewById(R.id.listview_fragment_c);
+
+        mFab.setOnClickListener(this);
         mListView.setOnItemClickListener(this);
+    }
+
+    private void DoEvent() {
         mData.add("白羊座 ： 3月21日-4月19日");
         mData.add("金牛座 ： 4月20日-5月20日");
         mData.add("双子座 ： 5月21日-6月21日");
@@ -104,5 +115,14 @@ public class FragmentC extends Fragment implements AdapterView.OnItemClickListen
                 startActivity(intent);
                 break;
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        Snackbar.make(v, "友情提醒：命运是可以改变的!", Snackbar.LENGTH_LONG).setAction("别信我", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        }).show();
     }
 }

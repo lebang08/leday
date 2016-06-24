@@ -17,6 +17,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.leday.R;
 import com.leday.Util.LogUtil;
 import com.leday.Util.MySingleton;
+import com.leday.Util.UpdateUtil;
 import com.leday.adapter.weatheradapter;
 import com.leday.entity.Weather;
 
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         initView();
         initEvent();
+        new UpdateUtil(this).checkUpdate();
     }
 
     private void initView() {
@@ -84,14 +86,6 @@ public class MainActivity extends AppCompatActivity {
                 LogUtil.e("Wrong-BACK", "联接错误原因： " + error.getMessage());
             }
         });
-//        {
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                Map<String, String> hashMap = new HashMap<String, String>();
-//                hashMap.put("token", "89F862A5EA64D897FB1D05F95C113AD8");
-//                return hashMap;
-//            }
-//        };
         weatherRequest.setTag("GET");
         MySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(weatherRequest);
     }
@@ -123,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 weatherList.add(weather);
                 LogUtil.e("future", "futureinfo :" + weather.toString());
             }
-            LogUtil.e("future", "futureinfo :" + weatherList);
+//            LogUtil.e("future", "futureinfo :" + weatherList);
         } catch (JSONException e) {
             e.printStackTrace();
         }

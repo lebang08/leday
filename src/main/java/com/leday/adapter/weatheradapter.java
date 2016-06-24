@@ -1,7 +1,6 @@
 package com.leday.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.leday.R;
+import com.leday.Util.LogUtil;
 import com.leday.entity.Weather;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class weatheradapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        Log.e("size",mList.size() + "");
+        LogUtil.e("size", mList.size() + "");
         return mList.size();
     }
 

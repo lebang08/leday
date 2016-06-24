@@ -1,6 +1,7 @@
 package com.leday.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +9,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.ImageRequest;
 import com.leday.R;
+import com.leday.Util.MySingleton;
+import com.leday.application.MyApplication;
 import com.leday.entity.Wechat;
 
 import java.util.List;
@@ -55,17 +61,12 @@ public class WechatAdapter extends BaseAdapter {
             viewHold = (ViewHold) convertView.getTag();
         }
         viewHold.mImg.setImageResource(R.drawable.star_title);
-        viewHold.mTitle.setText( (position+1) + ". " +  mList.get(position).getTitle());
+        viewHold.mTitle.setText((position + 1) + ". " + mList.get(position).getTitle());
         viewHold.mAuthor.setText("来自微信: " + mList.get(position).getSource());
 
-        //TODO 加载网络图片，不能在主线程，非主线程又不能更新UI
-//        URL url = null;
-//        try {
-//            url = new URL(mList.get(position).getFirstImg());
-//            viewHold.mImg.setImageBitmap(BitmapFactory.decodeStream(url.openStream()));
-//        } catch (java.io.IOException e) {
-//            e.printStackTrace();
-//        }
+//        ImageLoader imgloader = new ImageLoader(MyApplication.getHttpQueue(), null);
+//        ImageLoader.ImageListener imglistener = ImageLoader.getImageListener(viewHold.mImg, 0, 0);
+//        imgloader.get(mList.get(position).getFirstImg(), imglistener);
         return convertView;
     }
 

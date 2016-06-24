@@ -1,9 +1,11 @@
 package com.leday.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +17,11 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.leday.Impl.ListViewHightImpl;
 import com.leday.R;
+import com.leday.Util.LogUtil;
 import com.leday.Util.MySingleton;
-import com.leday.activity.CookActivity;
+import com.leday.Util.ToastUtil;
 import com.leday.activity.TodayActivity;
 import com.leday.entity.Today;
 
@@ -86,16 +88,16 @@ public class FragmentB extends Fragment implements AdapterView.OnItemClickListen
         String merge;
         try {
             obj = new JSONObject(response);
-            Log.e("URL_TOTAL", obj.toString());
+            LogUtil.e("URL_TOTAL", obj.toString());
             arr = obj.getJSONArray("result");
-            Log.e("URL_TOTAL", arr.toString());
+            LogUtil.e("URL_TOTAL", arr.toString());
             for (int i = 0; i <= arr.length(); i++) {
                 obj = arr.getJSONObject(i);
                 today = new Today();
                 today.setDate(obj.getString("date"));
                 today.setTitle(obj.getString("title"));
                 today.setE_id(obj.getString("e_id"));
-                merge = today.getDate() + ": " + today.getTitle();
+                merge = (i + 1) + "、 " + today.getDate() + ": " + today.getTitle();
                 mDataList.add(merge);
                 mTodayList.add(today);
             }
