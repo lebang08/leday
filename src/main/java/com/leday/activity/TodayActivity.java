@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,6 +15,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.leday.R;
+import com.leday.Util.LogUtil;
 import com.leday.Util.MySingleton;
 
 import org.json.JSONArray;
@@ -74,24 +74,23 @@ public class TodayActivity extends AppCompatActivity {
             obj = new JSONObject(response);
             arr = obj.getJSONArray("result");
             obj = arr.getJSONObject(0);
-            Log.e("linx1", obj.toString());
+            LogUtil.e("linx1", obj.toString());
             String mcontent = obj.getString("content");
             mContent.setText(mcontent);
             String picnumber = obj.getString("picNo");
-            Log.e("linx2", "picnumber = " + picnumber);
+            LogUtil.e("linx2", "picnumber = " + picnumber);
             arr = obj.getJSONArray("picUrl");
-            Log.e("linx3", arr.toString());
+            LogUtil.e("linx3", arr.toString());
             if (arr.length() == 0) {
                 mViewFlipper.setVisibility(View.GONE);
             }
             for (int i = 0; i < arr.length(); i++) {
                 obj = arr.getJSONObject(i);
                 String imgurl = obj.getString("url");
-                //TODO   未做完的imgurl到Gallery中
                 ImageView mImgview = new ImageView(TodayActivity.this);
                 getBitmap(imgurl, mImgview);
                 mViewFlipper.addView(mImgview);
-                Log.e("linx4", imgurl.toString());
+                LogUtil.e("linx4", imgurl.toString());
             }
         } catch (JSONException e) {
             e.printStackTrace();

@@ -10,7 +10,7 @@ import com.android.volley.toolbox.Volley;
  */
 public class MyApplication extends Application {
 
-    public static RequestQueue mQueue;
+    private static RequestQueue mQueue;
 
     @Override
     public void onCreate() {

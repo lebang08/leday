@@ -27,14 +27,16 @@
         <activity android:name=".activity.CookActivity" />
         <activity
             android:name=".activity.TabActivity"
-            android:label="@string/title_activity_tab"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.TodayActivity"
-            android:label="今天" />
+            android:label="今时今往" />
         <activity
             android:name=".activity.StarActivity"
-            android:label="星运" />
+            android:label="星座星运" />
+        <activity
+            android:name=".activity.WechatActivity"
+            android:label="微信微选" />
     </application>
 
 </manifest>

@@ -1,24 +1,25 @@
 package com.leday.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.leday.Impl.ListViewHightImpl;
 import com.leday.R;
-import com.leday.Util.ListViewHightHelper;
+import com.leday.Util.LogUtil;
 import com.leday.Util.MySingleton;
+import com.leday.activity.WechatActivity;
+import com.leday.adapter.WechatAdapter;
+import com.leday.entity.Wechat;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,13 +28,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentA extends Fragment {
+public class FragmentA extends Fragment implements AdapterView.OnItemClickListener {
 
     private ListView mListView;
-    private List<String> mDataList = new ArrayList<>();
-    private ArrayAdapter<String> mAdapter;
+    private List<Wechat> wechatList = new ArrayList<>();
+    private WechatAdapter mAdapter;
 
-    private static final String URL = "http://v.juhe.cn/boxoffice/rank.php?key=390b1c633ac041de0008bb73c769063c&area=CN";
+    private static final String URL = "http://v.juhe.cn/weixin/query?key=4d8f538fca6369950978621cf6287bde";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,6 +46,8 @@ public class FragmentA extends Fragment {
 
     private void initView(View view) {
         mListView = (ListView) view.findViewById(R.id.listview_fragment_a);
+
+        mListView.setOnItemClickListener(this);
     }
 
     private void initEvent() {
@@ -56,41 +59,48 @@ public class FragmentA extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Wrong-BACK", "联接错误原因： " + error.getMessage(), error);
+                LogUtil.e("Wrong-BACK", "联接错误原因： " + error.getMessage());
             }
         });
-//        {
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                Map<String, String> hashMap = new HashMap<String, String>();
-//                hashMap.put("token", "89F862A5EA64D897FB1D05F95C113AD8");
-//                return hashMap;
-//            }
-//        };
         filmrequest.setTag("GET");
-//        MyApplication.getHttpQueue().add(stringReques);
         MySingleton.getInstance(this.getActivity().getApplicationContext()).addToRequestQueue(filmrequest);
     }
 
     private void Dosuccess(String response) {
         JSONObject obj;
         JSONArray arr;
-        String mFilm, name, total;
         try {
             obj = new JSONObject(response);
-            arr = obj.getJSONArray("result");
+            obj = obj.getJSONObject("result");
+            arr = obj.getJSONArray("list");
+            Wechat wechat;
             for (int i = 0; i <= arr.length(); i++) {
                 obj = arr.getJSONObject(i);
-                name = obj.getString("name");
-                total = obj.getString("tboxoffice");
-                mFilm = name + "： 总票房 = " + total + "万元";
-                mDataList.add(mFilm);
+                wechat = new Wechat();
+                if (obj.getString("firstImg").equals("")) {
+                    continue;
+                }
+                wechat.setFirstImg(obj.getString("firstImg"));
+                wechat.setTitle(obj.getString("title"));
+                wechat.setSource(obj.getString("source"));
+                wechat.setUrl(obj.getString("url"));
+                LogUtil.e(wechat.toString());
+                wechatList.add(wechat);
             }
+            LogUtil.e("linx", wechatList.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        mAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, mDataList);
+        mAdapter = new WechatAdapter(getActivity(), wechatList);
         mListView.setAdapter(mAdapter);
         new ListViewHightImpl(mListView).setListViewHeightBasedOnChildren();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        String localurl = wechatList.get(position).getUrl();
+        Intent intent = new Intent(getActivity(), WechatActivity.class);
+        intent.putExtra("localurl", localurl);
+        startActivity(intent);
     }
 }

@@ -2,6 +2,7 @@ package com.leday.Util;
 /**
  * Google官方关于Volley的单例
  */
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.LruCache;
@@ -16,9 +17,11 @@ import com.android.volley.toolbox.Volley;
  */
 public class MySingleton {
     private static MySingleton mInstance;
-    private RequestQueue mRequestQueue;
-    private ImageLoader mImageLoader;
     private static Context mCtx;
+    //懒汉模式单例
+    private RequestQueue mRequestQueue;
+    //饿汉模式单例
+    private ImageLoader mImageLoader;
 
     private MySingleton(Context context) {
         mCtx = context;
@@ -49,9 +52,8 @@ public class MySingleton {
     }
 
     public RequestQueue getRequestQueue() {
+        //懒汉模式
         if (mRequestQueue == null) {
-            // getApplicationContext() is key, it keeps you from leaking the
-            // Activity or BroadcastReceiver if someone passes one in.
             mRequestQueue = Volley.newRequestQueue(mCtx.getApplicationContext());
         }
         return mRequestQueue;

@@ -21,7 +21,7 @@
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:title="电影">
+            app:title="微选">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -47,9 +47,7 @@
                 android:id="@+id/listview_fragment_a"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/text_margin"
-                android:divider="#00000000"
-                android:dividerHeight="16dp" />
+                android:divider="#5d6cc1" />
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

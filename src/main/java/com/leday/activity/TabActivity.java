@@ -35,7 +35,7 @@ public class TabActivity extends AppCompatActivity implements View.OnClickListen
 
         initTab();
         initView();
-        setSelect(2);
+        setSelect(0);
     }
 
     private void initView() {

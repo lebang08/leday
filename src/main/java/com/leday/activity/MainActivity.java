@@ -2,26 +2,20 @@ package com.leday.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.leday.Impl.ListViewHightImpl;
 import com.leday.R;
+import com.leday.Util.LogUtil;
 import com.leday.Util.MySingleton;
 import com.leday.adapter.weatheradapter;
 import com.leday.entity.Weather;
@@ -87,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Wrong-BACK", "联接错误原因： " + error.getMessage(), error);
+                LogUtil.e("Wrong-BACK", "联接错误原因： " + error.getMessage());
             }
         });
 //        {
@@ -108,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             obj = new JSONObject(response);
             arr = obj.getJSONArray("result");
-//                    Log.e("arr", "arr :" + arr);
+            LogUtil.e("arr", "arr :" + arr);
             obj = arr.getJSONObject(0);
             String temperature = obj.getString("temperature");
             String wea = obj.getString("weather");
@@ -127,9 +121,9 @@ public class MainActivity extends AppCompatActivity {
                 weather.setWeek(obj.getString("week"));
                 weather.setWind(obj.getString("wind"));
                 weatherList.add(weather);
-//                Log.e("future", "futureinfo :" + weather.toString());
+                LogUtil.e("future", "futureinfo :" + weather.toString());
             }
-//            Log.e("future", "futureinfo :" + weatherList);
+            LogUtil.e("future", "futureinfo :" + weatherList);
         } catch (JSONException e) {
             e.printStackTrace();
         }
