@@ -8,15 +8,16 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.leday.R;
+import com.leday.entity.Talk;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class TalkAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
-    private List<String> mDatas;
+    private List<Talk> mDatas;
 
-    public TalkAdapter(Context context, List<String> mDatas) {
+    public TalkAdapter(Context context, List<Talk> mDatas) {
         mInflater = LayoutInflater.from(context);
         this.mDatas = mDatas;
     }
@@ -38,10 +39,10 @@ public class TalkAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-//        ChatMessage chatMessage = mDatas.get(position);
-//        if (chatMessage.getType() == Type.INCOMING) {
-//            return 0;
-//        }
+        Talk talk = mDatas.get(position);
+        if (talk.getType() == Talk.Type.INCOMING) {
+            return 0;
+        }
         return 1;
     }
 
@@ -52,10 +53,10 @@ public class TalkAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-//        ChatMessage chatMessage = mDatas.get(position);
+        Talk talk = mDatas.get(position);
         ViewHolder viewHolder = null;
         if (convertView == null) {
-            // ͨ��ItemType���ò�ͬ�Ĳ���
+            // 通过ItemType设置不同的布局
             if (getItemViewType(position) == 0) {
                 convertView = mInflater.inflate(R.layout.item_from_msg, parent,
                         false);
@@ -77,10 +78,10 @@ public class TalkAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        // ��������
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        viewHolder.mDate.setText(df.format(chatMessage.getDate()));
-//        viewHolder.mMsg.setText(chatMessage.getMsg());
+        // 设置数据
+        SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        viewHolder.mDate.setText(dateformat.format(talk.getDate()));
+        viewHolder.mMsg.setText(talk.getMsg());
         return convertView;
     }
 

@@ -1,36 +1,43 @@
 package com.leday.activity;
 
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.leday.R;
+import com.leday.Util.TalkHttpUtils;
+import com.leday.Util.ToastUtil;
+import com.leday.adapter.TalkAdapter;
+import com.leday.entity.Talk;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class TalkActivity extends AppCompatActivity {
-    private ListView mMsgs;
-//    private ChatMessageAdapter mAdapter;
-//    private List<ChatMessage> mDatas;
 
     private EditText mInputMsg;
     private Button mSendMsg;
 
+    private ListView mMsgs;
+    private TalkAdapter mAdapter;
+    private List<Talk> mDatas;
+
     private Handler mHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
-            // 等待接收，子线程完成数据的返回
-//            ChatMessage fromMessge = (ChatMessage) msg.obj;
-//            mDatas.add(fromMessge);
-//            mAdapter.notifyDataSetChanged();
-//            mMsgs.setSelection(mDatas.size() - 1);
-        }
-
-        ;
+            //等待接收，子线程完成数据的返回
+            Talk fromMessge = (Talk) msg.obj;
+            mDatas.add(fromMessge);
+            mAdapter.notifyDataSetChanged();
+            mMsgs.setSelection(mDatas.size() - 1);
+        } ;
     };
 
     @Override
@@ -52,10 +59,10 @@ public class TalkActivity extends AppCompatActivity {
     }
 
     private void initDatas() {
-//        mDatas = new ArrayList<ChatMessage>();
-//        mDatas.add(new ChatMessage("你好，小慕为您服务", Type.INCOMING, new Date()));
-//        mAdapter = new ChatMessageAdapter(this, mDatas);
-//        mMsgs.setAdapter(mAdapter);
+        mDatas = new ArrayList<Talk>();
+        mDatas.add(new Talk("客官，您好，我是挨骂替身", Talk.Type.INCOMING, new Date()));
+        mAdapter = new TalkAdapter(this, mDatas);
+        mMsgs.setAdapter(mAdapter);
     }
 
     private void initListener() {
@@ -64,30 +71,30 @@ public class TalkActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final String toMsg = mInputMsg.getText().toString();
                 if (TextUtils.isEmpty(toMsg)) {
-                    Toast.makeText(TalkActivity.this, "发送消息不能为空！",
-                            Toast.LENGTH_SHORT).show();
+                    ToastUtil.showMessage(TalkActivity.this, "发送消息不能为空哦!");
                     return;
                 }
 
-//                ChatMessage toMessage = new ChatMessage();
-//                toMessage.setDate(new Date());
-//                toMessage.setMsg(toMsg);
-//                toMessage.setType(Type.OUTCOMING);
-//                mDatas.add(toMessage);
-//                mAdapter.notifyDataSetChanged();
-//                mMsgs.setSelection(mDatas.size() - 1);
+                Talk toMessage = new Talk();
+                toMessage.setDate(new Date());
+                toMessage.setType(Talk.Type.OUTCOMING);
+                toMessage.setMsg(toMsg);
+                //数据中加入toMessage对象，发送消息
+                mDatas.add(toMessage);
+                mAdapter.notifyDataSetChanged();
+                mMsgs.setSelection(mDatas.size() - 1);
 
+                //发送后置空消息EditText中的消息
                 mInputMsg.setText("");
 
+                //开启子线程接收fromMessage的消息
                 new Thread() {
                     public void run() {
-//                        ChatMessage fromMessage = HttpUtils.sendMessage(toMsg);
-//                        Message m = Message.obtain();
-//                        m.obj = fromMessage;
-//                        mHandler.sendMessage(m);
-                    }
-
-                    ;
+                        Talk fromMessage = TalkHttpUtils.sendMessage(toMsg);
+                        Message msg = Message.obtain();
+                        msg.obj = fromMessage;
+                        mHandler.sendMessage(msg);
+                    };
                 }.start();
             }
         });
