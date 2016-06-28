@@ -34,11 +34,12 @@
             android:name=".activity.StarActivity"
             android:label="星座星运" />
         <activity
-            android:name=".activity.WechatActivity"
+            android:name=".activity.WebViewActivity"
             android:label="微信微选" />
         <activity
             android:name=".activity.TalkActivity"
             android:label="挨骂替身" />
+        <activity android:name=".activity.AnimationActivity"></activity>
     </application>
 
 </manifest>

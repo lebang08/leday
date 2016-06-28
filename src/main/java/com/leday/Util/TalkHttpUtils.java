@@ -29,7 +29,7 @@ public class TalkHttpUtils {
             String localmsg = obj.getString("text");
             talk.setMsg(localmsg);
         } catch (JSONException e) {
-            talk.setMsg("网络连接错误，稍后再试哦");
+            talk.setMsg("网络不佳，再试试呗");
         }
         talk.setDate(new Date());
         talk.setType(Talk.Type.INCOMING);

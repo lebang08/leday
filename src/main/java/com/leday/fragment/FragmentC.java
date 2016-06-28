@@ -2,127 +2,100 @@ package com.leday.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.leday.Impl.ListViewHightImpl;
 import com.leday.R;
-import com.leday.activity.StarActivity;
-import com.leday.adapter.StarAdapter;
+import com.leday.Util.LogUtil;
+import com.leday.entity.Wechat;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentC extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener {
-
-    private FloatingActionButton mFab;
+public class FragmentC extends android.support.v4.app.Fragment implements AdapterView.OnItemClickListener {
 
     private ListView mListView;
-    private List<String> mData = new ArrayList<>();
-    private StarAdapter mAdapter;
+    private List<Wechat> wechatList = new ArrayList<>();
+    private WechatAdapter mAdapter;
+
+    private static final String URL = "http://v.juhe.cn/weixin/query?key=4d8f538fca6369950978621cf6287bde";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_c, container, false);
-
         initView(view);
-        DoEvent();
+        initEvent();
         return view;
     }
 
     private void initView(View view) {
-        mFab = (FloatingActionButton) view.findViewById(R.id.fab_fragment_c);
         mListView = (ListView) view.findViewById(R.id.listview_fragment_c);
 
-        mFab.setOnClickListener(this);
         mListView.setOnItemClickListener(this);
     }
 
-    private void DoEvent() {
-        mData.add("白羊座 ： 3月21日-4月19日");
-        mData.add("金牛座 ： 4月20日-5月20日");
-        mData.add("双子座 ： 5月21日-6月21日");
-        mData.add("巨蟹座 ： 6月22日-7月22日");
-        mData.add("獅子座 ： 7月23日-8月22日");
-        mData.add("处女座 ： 8月23日-9月22日");
-        mData.add("天秤座 ： 9月23日-10月23日");
-        mData.add("天蝎座 ： 10月24日-11月22日");
-        mData.add("射手座 ： 11月23日-12月21日");
-        mData.add("摩羯座 ： 12月22日-1月19日");
-        mData.add("水瓶座 ： 1月20日-2月18日");
-        mData.add("双鱼座 ： 2月19日-3月20日");
-        mAdapter = new StarAdapter(getActivity(), mData);
+    private void initEvent() {
+        StringRequest filmrequest = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Dosuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                LogUtil.e("Wrong-BACK", "联接错误原因： " + error.getMessage());
+            }
+        });
+        filmrequest.setTag("GET");
+    }
+
+    private void Dosuccess(String response) {
+        JSONObject obj;
+        JSONArray arr;
+        try {
+            obj = new JSONObject(response);
+            obj = obj.getJSONObject("result");
+            arr = obj.getJSONArray("list");
+            Wechat wechat;
+            for (int i = 0; i < arr.length(); i++) {
+                obj = arr.getJSONObject(i);
+                wechat = new Wechat();
+                if (obj.getString("firstImg").equals("")) {
+                    continue;
+                }
+                wechat.setFirstImg(obj.getString("firstImg"));
+                wechat.setTitle(obj.getString("title"));
+                wechat.setSource(obj.getString("source"));
+                wechat.setUrl(obj.getString("url"));
+                LogUtil.e(wechat.toString());
+                wechatList.add(wechat);
+            }
+            LogUtil.e("linx", wechatList.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mAdapter = new WechatAdapter(getActivity(), wechatList);
         mListView.setAdapter(mAdapter);
         new ListViewHightImpl(mListView).setListViewHeightBasedOnChildren();
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(getActivity(), StarActivity.class);
-        switch (position) {
-            case 0:
-                intent.putExtra("star", "白羊座");
-                startActivity(intent);
-                break;
-            case 1:
-                intent.putExtra("star", "金牛座");
-                startActivity(intent);
-                break;
-            case 2:
-                intent.putExtra("star", "双子座");
-                startActivity(intent);
-                break;
-            case 3:
-                intent.putExtra("star", "巨蟹座");
-                startActivity(intent);
-                break;
-            case 4:
-                intent.putExtra("star", "狮子座");
-                startActivity(intent);
-                break;
-            case 5:
-                intent.putExtra("star", "处女座");
-                startActivity(intent);
-                break;
-            case 6:
-                intent.putExtra("star", "天秤座");
-                startActivity(intent);
-                break;
-            case 7:
-                intent.putExtra("star", "天蝎座");
-                startActivity(intent);
-                break;
-            case 8:
-                intent.putExtra("star", "射手座");
-                startActivity(intent);
-                break;
-            case 9:
-                intent.putExtra("star", "摩羯座");
-                startActivity(intent);
-                break;
-            case 10:
-                intent.putExtra("star", "水瓶座");
-                startActivity(intent);
-                break;
-            case 11:
-                intent.putExtra("star", "双鱼座");
-                startActivity(intent);
-                break;
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        Snackbar.make(v, "友情提醒：命运是可以改变的!", Snackbar.LENGTH_LONG).setAction("别信我", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        }).show();
+        String localurl = wechatList.get(position).getUrl();
+        Intent intent = new Intent(getActivity(), WebViewActivity.class);
+        intent.putExtra("localurl", localurl);
+        startActivity(intent);
     }
 }

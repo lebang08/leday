@@ -1,118 +1,117 @@
 package com.leday.fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.leday.Impl.ListViewHightImpl;
 import com.leday.R;
-import com.leday.Util.LogUtil;
-import com.leday.Util.MySingleton;
-import com.leday.Util.ToastUtil;
-import com.leday.activity.TodayActivity;
-import com.leday.entity.Today;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.leday.activity.StarActivity;
+import com.leday.adapter.StarAdapter;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
-public class FragmentB extends Fragment implements AdapterView.OnItemClickListener {
+public class FragmentB extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener {
+
+    private FloatingActionButton mFab;
 
     private ListView mListView;
-    private ArrayAdapter mAdapter;
-    private List<String> mDataList = new ArrayList<>();
-    private List<Today> mTodayList = new ArrayList<>();
-
-    private Calendar mCalendar = Calendar.getInstance();
-    private static final String URL = "http://v.juhe.cn/todayOnhistory/queryEvent.php?key=776cbc23ec84837a647a7714a0f06bff&date=";
-    private String URL_TOTAL;
+    private List<String> mData = new ArrayList<>();
+    private StarAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_b, container, false);
 
         initView(view);
-        getJson();
+        DoEvent();
         return view;
     }
 
     private void initView(View view) {
+        mFab = (FloatingActionButton) view.findViewById(R.id.fab_fragment_b);
         mListView = (ListView) view.findViewById(R.id.listview_fragment_b);
 
+        mFab.setOnClickListener(this);
         mListView.setOnItemClickListener(this);
     }
 
-    public void getJson() {
-        //获取时间,月和日
-        int localMonth = mCalendar.get(Calendar.MONTH);
-        int localDay = mCalendar.get(Calendar.DAY_OF_MONTH);
-        URL_TOTAL = URL + (localMonth + 1) + "/" + localDay;
-        //请求网络
-        StringRequest todayrequest = new StringRequest(Request.Method.GET, URL_TOTAL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Dosuccess(response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-
-            }
-        });
-        todayrequest.setTag("GET");
-        MySingleton.getInstance(this.getActivity().getApplicationContext()).addToRequestQueue(todayrequest);
-    }
-
-    //请求成功的处理
-    private void Dosuccess(String response) {
-        JSONObject obj;
-        JSONArray arr;
-        Today today;
-        String merge;
-        try {
-            obj = new JSONObject(response);
-            LogUtil.e("URL_TOTAL", obj.toString());
-            arr = obj.getJSONArray("result");
-            LogUtil.e("URL_TOTAL", arr.toString());
-            for (int i = 0; i <= arr.length(); i++) {
-                obj = arr.getJSONObject(i);
-                today = new Today();
-                today.setDate(obj.getString("date"));
-                today.setTitle(obj.getString("title"));
-                today.setE_id(obj.getString("e_id"));
-                merge = (i + 1) + "、 " + today.getDate() + ": " + today.getTitle();
-                mDataList.add(merge);
-                mTodayList.add(today);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, mDataList);
+    private void DoEvent() {
+        mData.add("白羊座 ： 3月21日-4月19日");
+        mData.add("金牛座 ： 4月20日-5月20日");
+        mData.add("双子座 ： 5月21日-6月21日");
+        mData.add("巨蟹座 ： 6月22日-7月22日");
+        mData.add("獅子座 ： 7月23日-8月22日");
+        mData.add("处女座 ： 8月23日-9月22日");
+        mData.add("天秤座 ： 9月23日-10月23日");
+        mData.add("天蝎座 ： 10月24日-11月22日");
+        mData.add("射手座 ： 11月23日-12月21日");
+        mData.add("摩羯座 ： 12月22日-1月19日");
+        mData.add("水瓶座 ： 1月20日-2月18日");
+        mData.add("双鱼座 ： 2月19日-3月20日");
+        mAdapter = new StarAdapter(getActivity(), mData);
         mListView.setAdapter(mAdapter);
         new ListViewHightImpl(mListView).setListViewHeightBasedOnChildren();
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(getActivity(), TodayActivity.class);
-        intent.putExtra("locale_id", mTodayList.get(position).getE_id());
-        startActivity(intent);
+        Intent intent = new Intent(getActivity(), StarActivity.class);
+        intent.putExtra("imgId", position);
+        switch (position) {
+            case 0:
+                startActivity(intent);
+                break;
+            case 1:
+                startActivity(intent);
+                break;
+            case 2:
+                startActivity(intent);
+                break;
+            case 3:
+                startActivity(intent);
+                break;
+            case 4:
+                startActivity(intent);
+                break;
+            case 5:
+                startActivity(intent);
+                break;
+            case 6:
+                startActivity(intent);
+                break;
+            case 7:
+                startActivity(intent);
+                break;
+            case 8:
+                startActivity(intent);
+                break;
+            case 9:
+                startActivity(intent);
+                break;
+            case 10:
+                startActivity(intent);
+                break;
+            case 11:
+                startActivity(intent);
+                break;
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        Snackbar.make(v, "友情提醒：命运是可以改变的!", Snackbar.LENGTH_LONG).setAction("别信我", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        }).show();
     }
 }

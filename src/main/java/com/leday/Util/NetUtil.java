@@ -22,7 +22,6 @@ public class NetUtil {
 
     /**
      * 判断网络是否连接
-     *
      * @param context
      * @return
      */
@@ -66,5 +65,4 @@ public class NetUtil {
         intent.setAction("android.intent.action.VIEW");
         activity.startActivityForResult(intent, 0);
     }
-
 }

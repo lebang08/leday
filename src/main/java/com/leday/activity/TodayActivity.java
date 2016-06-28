@@ -1,7 +1,6 @@
 package com.leday.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,12 +11,11 @@ import android.widget.ViewFlipper;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.leday.R;
 import com.leday.Util.LogUtil;
-import com.leday.Util.MySingleton;
 import com.leday.application.MyApplication;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,6 +28,12 @@ public class TodayActivity extends AppCompatActivity {
 
     private String locale_id;
     private static final String URL = "http://v.juhe.cn/todayOnhistory/queryDetail.php?key=776cbc23ec84837a647a7714a0f06bff&e_id=";
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        MyApplication.getHttpQueue().cancelAll("GET");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +68,7 @@ public class TodayActivity extends AppCompatActivity {
             }
         });
         todayactivityrequest.setTag("GET");
-//        Google官方推荐的单例模式请求队列
-        MySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(todayactivityrequest);
-//        MyApplication.getHttpQueue().add(todayactivityrequest);
+        MyApplication.getHttpQueue().add(todayactivityrequest);
     }
 
     private void Dosuccess(String response) {
@@ -90,22 +92,12 @@ public class TodayActivity extends AppCompatActivity {
                 obj = arr.getJSONObject(i);
                 String imgurl = obj.getString("url");
                 ImageView mImgview = new ImageView(TodayActivity.this);
-                getBitmap(imgurl, mImgview);
+                Picasso.with(TodayActivity.this).load(imgurl).into(mImgview);
                 mViewFlipper.addView(mImgview);
                 LogUtil.e("linx4", imgurl.toString());
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    private void getBitmap(String localimg, final ImageView localImageview) {
-        ImageRequest imgrequest = new ImageRequest(localimg, new Response.Listener<Bitmap>() {
-            @Override
-            public void onResponse(Bitmap bitmap) {
-                localImageview.setImageBitmap(bitmap);
-            }
-        }, 0, 0, Bitmap.Config.RGB_565, null);
-        MySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(imgrequest);
     }
 }

@@ -1,7 +1,6 @@
 package com.leday.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,13 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.Response;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.ImageRequest;
 import com.leday.R;
-import com.leday.Util.MySingleton;
-import com.leday.application.MyApplication;
 import com.leday.entity.Wechat;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -26,10 +21,12 @@ public class WechatAdapter extends BaseAdapter {
 
     private List<Wechat> mList;
     private LayoutInflater mInflater;
+    private Context mContext;
 
     public WechatAdapter(Context mContext, List<Wechat> mList) {
         this.mList = mList;
         mInflater = LayoutInflater.from(mContext);
+        this.mContext = mContext;
     }
 
     @Override
@@ -60,13 +57,10 @@ public class WechatAdapter extends BaseAdapter {
         } else {
             viewHold = (ViewHold) convertView.getTag();
         }
-        viewHold.mImg.setImageResource(R.drawable.star_title);
-        viewHold.mTitle.setText((position + 1) + ". " + mList.get(position).getTitle());
+//        viewHold.mImg.setImageResource(R.drawable.star_title);
+        viewHold.mTitle.setText((position + 1) + "、 " + mList.get(position).getTitle());
         viewHold.mAuthor.setText("来自微信: " + mList.get(position).getSource());
-
-//        ImageLoader imgloader = new ImageLoader(MyApplication.getHttpQueue(), null);
-//        ImageLoader.ImageListener imglistener = ImageLoader.getImageListener(viewHold.mImg, 0, 0);
-//        imgloader.get(mList.get(position).getFirstImg(), imglistener);
+        Picasso.with(mContext).load(mList.get(position).getFirstImg()).into(viewHold.mImg);
         return convertView;
     }
 

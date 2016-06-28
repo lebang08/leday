@@ -16,9 +16,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.leday.R;
 import com.leday.Util.LogUtil;
-import com.leday.Util.MySingleton;
 import com.leday.Util.UpdateUtil;
 import com.leday.adapter.weatheradapter;
+import com.leday.application.MyApplication;
 import com.leday.entity.Weather;
 
 import org.json.JSONArray;
@@ -36,6 +36,12 @@ public class MainActivity extends AppCompatActivity {
     private List<Weather> weatherList = new ArrayList<Weather>();
 
     private String URL = "http://apicloud.mob.com/v1/weather/query?key=135b8ce813980&city=%E5%8E%A6%E9%97%A8";
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        MyApplication.getHttpQueue().cancelAll("GET");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         weatherRequest.setTag("GET");
-        MySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(weatherRequest);
+        MyApplication.getHttpQueue().add(weatherRequest);
     }
 
     private void DoSuccess(String response) {
@@ -115,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
                 weather.setWeek(obj.getString("week"));
                 weather.setWind(obj.getString("wind"));
                 weatherList.add(weather);
-                LogUtil.e("future", "futureinfo :" + weather.toString());
             }
 //            LogUtil.e("future", "futureinfo :" + weatherList);
         } catch (JSONException e) {

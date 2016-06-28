@@ -15,6 +15,7 @@ import com.leday.R;
 import com.leday.Util.TalkHttpUtils;
 import com.leday.Util.ToastUtil;
 import com.leday.adapter.TalkAdapter;
+import com.leday.application.MyApplication;
 import com.leday.entity.Talk;
 
 import java.util.ArrayList;
@@ -37,8 +38,16 @@ public class TalkActivity extends AppCompatActivity {
             mDatas.add(fromMessge);
             mAdapter.notifyDataSetChanged();
             mMsgs.setSelection(mDatas.size() - 1);
-        } ;
+        }
+
+        ;
     };
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        MyApplication.getHttpQueue().cancelAll("GET");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +68,8 @@ public class TalkActivity extends AppCompatActivity {
     }
 
     private void initDatas() {
-        mDatas = new ArrayList<Talk>();
-        mDatas.add(new Talk("客官，您好，我是挨骂替身", Talk.Type.INCOMING, new Date()));
+        mDatas = new ArrayList<>();
+        mDatas.add(new Talk("客官，您好，我是挨骂替身小图灵", Talk.Type.INCOMING, new Date()));
         mAdapter = new TalkAdapter(this, mDatas);
         mMsgs.setAdapter(mAdapter);
     }
@@ -94,7 +103,9 @@ public class TalkActivity extends AppCompatActivity {
                         Message msg = Message.obtain();
                         msg.obj = fromMessage;
                         mHandler.sendMessage(msg);
-                    };
+                    }
+
+                    ;
                 }.start();
             }
         });

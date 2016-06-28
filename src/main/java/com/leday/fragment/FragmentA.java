@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.android.volley.Request;
@@ -16,31 +17,35 @@ import com.android.volley.toolbox.StringRequest;
 import com.leday.Impl.ListViewHightImpl;
 import com.leday.R;
 import com.leday.Util.LogUtil;
-import com.leday.Util.MySingleton;
-import com.leday.activity.WechatActivity;
-import com.leday.adapter.WechatAdapter;
-import com.leday.entity.Wechat;
+import com.leday.activity.TodayActivity;
+import com.leday.application.MyApplication;
+import com.leday.entity.Today;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class FragmentA extends Fragment implements AdapterView.OnItemClickListener {
 
     private ListView mListView;
-    private List<Wechat> wechatList = new ArrayList<>();
-    private WechatAdapter mAdapter;
+    private ArrayAdapter mAdapter;
+    private List<String> mDataList = new ArrayList<>();
+    private List<Today> mTodayList = new ArrayList<>();
 
-    private static final String URL = "http://v.juhe.cn/weixin/query?key=4d8f538fca6369950978621cf6287bde";
+    private Calendar mCalendar = Calendar.getInstance();
+    private static final String URL = "http://v.juhe.cn/todayOnhistory/queryEvent.php?key=776cbc23ec84837a647a7714a0f06bff&date=";
+    private String URL_TOTAL;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_a, container, false);
+
         initView(view);
-        initEvent();
+        getJson();
         return view;
     }
 
@@ -50,57 +55,60 @@ public class FragmentA extends Fragment implements AdapterView.OnItemClickListen
         mListView.setOnItemClickListener(this);
     }
 
-    private void initEvent() {
-        StringRequest filmrequest = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
+    public void getJson() {
+        //获取时间,月和日
+        int localMonth = mCalendar.get(Calendar.MONTH);
+        int localDay = mCalendar.get(Calendar.DAY_OF_MONTH);
+        URL_TOTAL = URL + (localMonth + 1) + "/" + localDay;
+        //请求网络
+        StringRequest todayrequest = new StringRequest(Request.Method.GET, URL_TOTAL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Dosuccess(response);
             }
         }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                LogUtil.e("Wrong-BACK", "联接错误原因： " + error.getMessage());
+            public void onErrorResponse(VolleyError volleyError) {
+
             }
         });
-        filmrequest.setTag("GET");
-        MySingleton.getInstance(this.getActivity().getApplicationContext()).addToRequestQueue(filmrequest);
+        todayrequest.setTag("GET");
+        MyApplication.getHttpQueue().add(todayrequest);
     }
 
+    //请求成功的处理
     private void Dosuccess(String response) {
         JSONObject obj;
         JSONArray arr;
+        Today today;
+        String merge;
         try {
             obj = new JSONObject(response);
-            obj = obj.getJSONObject("result");
-            arr = obj.getJSONArray("list");
-            Wechat wechat;
+            LogUtil.e("URL_TOTAL", obj.toString());
+            arr = obj.getJSONArray("result");
+            LogUtil.e("URL_TOTAL", arr.toString());
             for (int i = 0; i <= arr.length(); i++) {
                 obj = arr.getJSONObject(i);
-                wechat = new Wechat();
-                if (obj.getString("firstImg").equals("")) {
-                    continue;
-                }
-                wechat.setFirstImg(obj.getString("firstImg"));
-                wechat.setTitle(obj.getString("title"));
-                wechat.setSource(obj.getString("source"));
-                wechat.setUrl(obj.getString("url"));
-                LogUtil.e(wechat.toString());
-                wechatList.add(wechat);
+                today = new Today();
+                today.setDate(obj.getString("date"));
+                today.setTitle(obj.getString("title"));
+                today.setE_id(obj.getString("e_id"));
+                merge = (i + 1) + "、 " + today.getDate() + ": " + today.getTitle();
+                mDataList.add(merge);
+                mTodayList.add(today);
             }
-            LogUtil.e("linx", wechatList.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        mAdapter = new WechatAdapter(getActivity(), wechatList);
+        mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, mDataList);
         mListView.setAdapter(mAdapter);
         new ListViewHightImpl(mListView).setListViewHeightBasedOnChildren();
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        String localurl = wechatList.get(position).getUrl();
-        Intent intent = new Intent(getActivity(), WechatActivity.class);
-        intent.putExtra("localurl", localurl);
+        Intent intent = new Intent(getActivity(), TodayActivity.class);
+        intent.putExtra("locale_id", mTodayList.get(position).getE_id());
         startActivity(intent);
     }
 }

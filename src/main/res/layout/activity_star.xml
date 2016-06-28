@@ -10,16 +10,16 @@
     tools:context="com.leday.activity.StarActivity">
 
     <ImageView
-        android:id="@+id/img_star_title"
+        android:id="@+id/img_activity_star"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:background="#336699" />
+        android:layout_height="240dp"
+        android:scaleType="fitCenter" />
 
     <LinearLayout
         android:id="@+id/ll_star_btns"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_below="@id/img_star_title"
+        android:layout_below="@id/img_activity_star"
         android:layout_marginTop="16dp"
         android:orientation="horizontal">
 
