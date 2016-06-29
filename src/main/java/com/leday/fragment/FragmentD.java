@@ -18,7 +18,10 @@ import android.widget.ListView;
 
 import com.leday.Impl.ListViewHightImpl;
 import com.leday.R;
+import com.leday.Util.LogUtil;
+import com.leday.Util.PreferenUtil;
 import com.leday.Util.ToastUtil;
+import com.leday.Util.UpdateUtil;
 import com.leday.activity.TalkActivity;
 
 import java.util.ArrayList;
@@ -65,6 +68,7 @@ public class FragmentD extends Fragment implements AdapterView.OnItemClickListen
         mData.add("就抽空搭建了这个APP，结果项目又来了");
         mData.add("所以......");
         mData.add("或许今后会继续更新");
+        mData.add("点这里查看版本信息");
         mData.add("但目前");
         mData.add("权当是支持谷歌的Material Design了");
     }
@@ -88,6 +92,7 @@ public class FragmentD extends Fragment implements AdapterView.OnItemClickListen
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (position == 4 || position == 10) {
+            //这两个事件，打开QQ
             boolean isExist = isApkInstalled(getActivity(), "com.tencent.mobileqq");
             if (isExist == false) {
                 ToastUtil.showMessage(getActivity(), "手机安装腾讯QQ才可以对话哦");
@@ -97,7 +102,17 @@ public class FragmentD extends Fragment implements AdapterView.OnItemClickListen
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(urltwo)));
                 return;
             }
+        } else if (position == 3) {
+            startActivity(new Intent(getActivity(), TalkActivity.class));
+        } else if (position == 16) {
+            //做版本判断
+            String localVersion = (String) PreferenUtil.get(getActivity(), "localVersion", "1.0");
+            String serverVersion = (String) PreferenUtil.get(getActivity(), "serverVersion", "1.0");
+            if (Float.parseFloat(localVersion) <= Float.parseFloat(serverVersion)) {
+                new UpdateUtil(getActivity()).checkUpdate();
+            }
         } else {
+            //其余选项事件
             Snackbar.make(view, "你戳了我，想干嘛？", Snackbar.LENGTH_SHORT).setAction("吐槽", mySnackOnclick()).show();
         }
     }

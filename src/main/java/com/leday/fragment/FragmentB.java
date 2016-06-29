@@ -68,39 +68,51 @@ public class FragmentB extends Fragment implements AdapterView.OnItemClickListen
         intent.putExtra("imgId", position);
         switch (position) {
             case 0:
+                intent.putExtra("star", "白羊座");
                 startActivity(intent);
                 break;
             case 1:
+                intent.putExtra("star", "金牛座");
                 startActivity(intent);
                 break;
             case 2:
+                intent.putExtra("star", "双子座");
                 startActivity(intent);
                 break;
             case 3:
+                intent.putExtra("star", "巨蟹座");
                 startActivity(intent);
                 break;
             case 4:
+                intent.putExtra("star", "狮子座");
                 startActivity(intent);
                 break;
             case 5:
+                intent.putExtra("star", "处女座");
                 startActivity(intent);
                 break;
             case 6:
+                intent.putExtra("star", "天秤座");
                 startActivity(intent);
                 break;
             case 7:
+                intent.putExtra("star", "天蝎座");
                 startActivity(intent);
                 break;
             case 8:
+                intent.putExtra("star", "射手座");
                 startActivity(intent);
                 break;
             case 9:
+                intent.putExtra("star", "摩羯座");
                 startActivity(intent);
                 break;
             case 10:
+                intent.putExtra("star", "水瓶座");
                 startActivity(intent);
                 break;
             case 11:
+                intent.putExtra("star", "双鱼座");
                 startActivity(intent);
                 break;
         }

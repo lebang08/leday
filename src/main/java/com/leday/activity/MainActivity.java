@@ -38,12 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private String URL = "http://apicloud.mob.com/v1/weather/query?key=135b8ce813980&city=%E5%8E%A6%E9%97%A8";
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        MyApplication.getHttpQueue().cancelAll("GET");
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

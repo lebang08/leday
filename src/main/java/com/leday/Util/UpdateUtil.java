@@ -79,9 +79,8 @@ public class UpdateUtil {
                 if (isUpdate()) {
                     showNoticeDialog();
                 } else {
-                    ToastUtil.showMessage(mcontext, "don't need update");
+                    ToastUtil.showMessage(mcontext, "当前是最新版本" + PreferenUtil.get(mcontext, "localVersion", ""));
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -237,6 +236,8 @@ public class UpdateUtil {
 
     //安装下载好的APK
     private void installAPK() {
+        //下载新版本后，消除欢迎页的key，再次安装则可以有引导动画
+        PreferenUtil.remove(mcontext, "welcome");
         File apkFile = new File(mSavePath, mVersion);
         if (!apkFile.exists()) {
             return;

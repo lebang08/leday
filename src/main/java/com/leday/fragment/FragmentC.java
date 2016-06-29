@@ -15,6 +15,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.leday.Impl.ListViewHightImpl;
 import com.leday.R;
 import com.leday.Util.LogUtil;
+import com.leday.activity.WebViewActivity;
+import com.leday.adapter.WechatAdapter;
+import com.leday.application.MyApplication;
 import com.leday.entity.Wechat;
 
 import org.json.JSONArray;
@@ -59,6 +62,7 @@ public class FragmentC extends android.support.v4.app.Fragment implements Adapte
             }
         });
         filmrequest.setTag("GET");
+        MyApplication.getHttpQueue().add(filmrequest);
     }
 
     private void Dosuccess(String response) {

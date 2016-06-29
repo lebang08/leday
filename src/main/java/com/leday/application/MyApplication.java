@@ -23,7 +23,6 @@ public class MyApplication extends Application {
         mInstance = this;
         mQueue = Volley.newRequestQueue(getApplicationContext());
     }
-
     public static RequestQueue getHttpQueue() {
         return mQueue;
     }

@@ -1,15 +1,86 @@
 package com.leday.activity;
 
+import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 
 import com.leday.R;
+import com.leday.Util.PreferenUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AnimationActivity extends AppCompatActivity {
+
+    private ViewPager mViewpager;
+    private List<View> mList = new ArrayList<>();
+    private View view1, view2;
+    private PagerAdapter mAdapter;
+    private FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_animation);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.activity_animation_welcome);
+
+        if (PreferenUtil.contains(this, "welcome")) {
+            startActivity(new Intent(this, TabActivity.class));
+            finish();
+        } else {
+            initView();
+        }
+    }
+
+    private void initView() {
+        mFab = (FloatingActionButton) findViewById(R.id.fab_animation);
+        mViewpager = (ViewPager) findViewById(R.id.viewpager_activity_animation);
+
+        initPager();
+    }
+
+    private void initPager() {
+        LayoutInflater mInflate = getLayoutInflater().from(this);
+        view1 = mInflate.inflate(R.layout.animation_welcome_a, null);
+        view2 = mInflate.inflate(R.layout.animation_welcome_b, null);
+        mList.add(view1);
+        mList.add(view2);
+        mAdapter = new PagerAdapter() {
+            @Override
+            public int getCount() {
+                return mList.size();
+            }
+
+            @Override
+            public boolean isViewFromObject(View view, Object object) {
+                return view == object;
+            }
+
+            @Override
+            public void destroyItem(ViewGroup container, int position,
+                                    Object object) {
+                container.removeView(mList.get(position));
+            }
+
+            @Override
+            public Object instantiateItem(ViewGroup container, int position) {
+                container.addView(mList.get(position));
+                return mList.get(position);
+            }
+        };
+        mViewpager.setAdapter(mAdapter);
+    }
+
+    public void animationWelcome(View view) {
+        startActivity(new Intent(this, TabActivity.class));
+        PreferenUtil.put(this, "welcome", 0);
+        finish();
     }
 }
