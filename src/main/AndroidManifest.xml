@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.AnimationActivity"
-            android:label="welcome"
+            android:label="@string/app_name"
             android:theme="@style/Theme.Design.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

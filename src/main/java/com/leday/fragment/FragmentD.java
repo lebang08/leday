@@ -106,10 +106,12 @@ public class FragmentD extends Fragment implements AdapterView.OnItemClickListen
             startActivity(new Intent(getActivity(), TalkActivity.class));
         } else if (position == 16) {
             //做版本判断
-            String localVersion = (String) PreferenUtil.get(getActivity(), "localVersion", "1.0");
-            String serverVersion = (String) PreferenUtil.get(getActivity(), "serverVersion", "1.0");
+            String localVersion = (String) PreferenUtil.get(getActivity(), "localVersion", "");
+            String serverVersion = (String) PreferenUtil.get(getActivity(), "serverVersion", "");
             if (Float.parseFloat(localVersion) <= Float.parseFloat(serverVersion)) {
                 new UpdateUtil(getActivity()).checkUpdate();
+            } else {
+                Snackbar.make(view, "当前是最新版本" + localVersion, Snackbar.LENGTH_SHORT).show();
             }
         } else {
             //其余选项事件

@@ -79,7 +79,7 @@ public class UpdateUtil {
                 if (isUpdate()) {
                     showNoticeDialog();
                 } else {
-                    ToastUtil.showMessage(mcontext, "当前是最新版本" + PreferenUtil.get(mcontext, "localVersion", ""));
+//                    ToastUtil.showMessage(mcontext, "当前是最新版本" + PreferenUtil.get(mcontext, "localVersion", ""));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -152,6 +152,8 @@ public class UpdateUtil {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 showDownloadDialog();
+                //下载新版本后，消除欢迎页的key，再次安装则可以有引导动画
+                PreferenUtil.remove(mcontext, "welcome");
             }
         });
         builder.setNegativeButton("下次再说", new OnClickListener() {
@@ -236,8 +238,6 @@ public class UpdateUtil {
 
     //安装下载好的APK
     private void installAPK() {
-        //下载新版本后，消除欢迎页的key，再次安装则可以有引导动画
-        PreferenUtil.remove(mcontext, "welcome");
         File apkFile = new File(mSavePath, mVersion);
         if (!apkFile.exists()) {
             return;
