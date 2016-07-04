@@ -27,9 +27,9 @@
                 android:id="@+id/backdrop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/title_about"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
-                android:background="@drawable/title_about"
                 app:layout_collapseMode="parallax" />
 
             <android.support.v7.widget.Toolbar

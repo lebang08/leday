@@ -129,7 +129,7 @@ public class UpdateUtil {
             //获取versionName作比较
             localVersion = mcontext.getPackageManager().getPackageInfo("com.leday", 0).versionName;
             //将该数据保存如sharepreference，留用
-            PreferenUtil.put(mcontext, "localVersion", mcontext.getPackageManager().getPackageInfo("com.woyuce.activity", 0).versionName);
+            PreferenUtil.put(mcontext, "localVersion", mcontext.getPackageManager().getPackageInfo("com.leday", 0).versionName);
             LogUtil.e("localVersion", "localVersion = " + localVersion);
         } catch (NameNotFoundException e) {
             e.printStackTrace();
@@ -146,7 +146,7 @@ public class UpdateUtil {
     protected void showNoticeDialog() {     //show 弹窗供选择是否更新
         AlertDialog.Builder builder = new Builder(mcontext, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
         builder.setTitle("发现新版本");
-        builder.setMessage(mMessage);
+//        builder.setMessage(mMessage);
         builder.setPositiveButton("更新", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -195,14 +195,14 @@ public class UpdateUtil {
                 try {
                     if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                         String sdPath = Environment.getExternalStorageDirectory() + "/";// sd卡根目录
-                        mSavePath = sdPath + "iyuce";
+                        mSavePath = sdPath + "le";
 
                         File dir = new File(mSavePath);
                         if (!dir.exists()) {
                             dir.mkdir();
                         }
 
-                        HttpURLConnection conn = (HttpURLConnection) new URL(mVersionURL).openConnection();
+                        HttpURLConnection conn = (HttpURLConnection) new URL("http://www.iyuce.com/uploadfiles/app/le.apk").openConnection();
                         conn.connect();
                         InputStream is = conn.getInputStream();
                         int length = conn.getContentLength();

@@ -1,7 +1,5 @@
 package com.leday.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.leday.R;
-import com.leday.Util.UpdateUtil;
 import com.leday.fragment.FragmentA;
 import com.leday.fragment.FragmentB;
 import com.leday.fragment.FragmentC;
@@ -31,18 +28,6 @@ public class TabActivity extends AppCompatActivity implements View.OnClickListen
     private LinearLayout mLinearLayout_a, mLinearLayout_b, mLinearLayout_c, mLinearLayout_d, mLinearLayout_e;
     private TextView mTxt_a, mTxt_b, mTxt_d, mTxt_e;
 
-
-    @Override
-    public void onBackPressed() {
-        new AlertDialog.Builder(this).setTitle("确认退出吗？").setIcon(android.R.drawable.ic_dialog_info)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        TabActivity.this.finish();
-                    }
-                }).setNegativeButton("返回", null).show();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +36,7 @@ public class TabActivity extends AppCompatActivity implements View.OnClickListen
         initTab();
         initView();
         setSelect(0);
-        new UpdateUtil(this).checkUpdate();
+//        new UpdateUtil(this).checkUpdate();
     }
 
     private void initView() {

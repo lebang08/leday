@@ -1,11 +1,11 @@
 package com.leday.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +33,7 @@ public class AnimationActivity extends AppCompatActivity {
 
         //判断是否存在该Key，决定是否需要引导动画
         if (PreferenUtil.contains(this, "welcome")) {
-            startActivity(new Intent(this, TabActivity.class));
+            startActivity(new Intent(this, MainActivity.class));
             finish();
         } else {
             initView();
@@ -84,7 +84,7 @@ public class AnimationActivity extends AppCompatActivity {
 
     //按钮，点击事件(XML中直接作了监听)
     public void animationWelcome(View view) {
-        startActivity(new Intent(this, TabActivity.class));
+        startActivity(new Intent(this, MainActivity.class));
         PreferenUtil.put(this, "welcome", 0);
         finish();
     }

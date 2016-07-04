@@ -108,7 +108,7 @@ public class FragmentD extends Fragment implements AdapterView.OnItemClickListen
             //做版本判断
             String localVersion = (String) PreferenUtil.get(getActivity(), "localVersion", "");
             String serverVersion = (String) PreferenUtil.get(getActivity(), "serverVersion", "");
-            if (Float.parseFloat(localVersion) <= Float.parseFloat(serverVersion)) {
+            if (Float.parseFloat(localVersion) < Float.parseFloat(serverVersion)) {
                 new UpdateUtil(getActivity()).checkUpdate();
             } else {
                 Snackbar.make(view, "当前是最新版本" + localVersion, Snackbar.LENGTH_SHORT).show();
