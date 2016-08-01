@@ -17,6 +17,7 @@ import com.leday.Util.ToastUtil;
 import com.leday.adapter.TalkAdapter;
 import com.leday.application.MyApplication;
 import com.leday.entity.Talk;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,6 +48,18 @@ public class TalkActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         MyApplication.getHttpQueue().cancelAll("GET");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override

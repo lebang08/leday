@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -17,7 +16,7 @@ import com.leday.R;
 import com.leday.Util.LogUtil;
 import com.leday.Util.ToastUtil;
 import com.leday.application.MyApplication;
-import com.squareup.picasso.Picasso;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +31,18 @@ public class StarActivity extends AppCompatActivity implements View.OnClickListe
     private String localtime = "today";
     private static final String URL = "http://web.juhe.cn:8080/constellation/getAll?key=c86828899c7c2b9cd39281ee48f90105&consName=";
     private int localtimes = 0;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -16,6 +16,7 @@ import com.leday.R;
 import com.leday.Util.LogUtil;
 import com.leday.application.MyApplication;
 import com.squareup.picasso.Picasso;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,6 +34,18 @@ public class TodayActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         MyApplication.getHttpQueue().cancelAll("GET");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override

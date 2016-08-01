@@ -15,6 +15,7 @@ import com.leday.fragment.FragmentA;
 import com.leday.fragment.FragmentB;
 import com.leday.fragment.FragmentC;
 import com.leday.fragment.FragmentD;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,20 @@ public class TabActivity extends AppCompatActivity implements View.OnClickListen
     private LinearLayout mLinearLayout_a, mLinearLayout_b, mLinearLayout_c, mLinearLayout_d, mLinearLayout_e;
     private TextView mTxt_a, mTxt_b, mTxt_d, mTxt_e;
 
+    private String localcontent;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,11 +50,10 @@ public class TabActivity extends AppCompatActivity implements View.OnClickListen
 
         initTab();
         initView();
-        setSelect(0);
-//        new UpdateUtil(this).checkUpdate();
     }
 
     private void initView() {
+        localcontent = getIntent().getStringExtra("content");
         mLinearLayout_a = (LinearLayout) findViewById(R.id.linearlayout_tab_a);
         mLinearLayout_b = (LinearLayout) findViewById(R.id.linearlayout_tab_b);
         mLinearLayout_c = (LinearLayout) findViewById(R.id.linearlayout_tab_c);
@@ -55,6 +69,13 @@ public class TabActivity extends AppCompatActivity implements View.OnClickListen
         mLinearLayout_c.setOnClickListener(this);
         mLinearLayout_d.setOnClickListener(this);
         mLinearLayout_e.setOnClickListener(this);
+        if (localcontent.equals("today")) {
+            setSelect(0);
+        } else if (localcontent.equals("star")) {
+            setSelect(1);
+        } else {
+            setSelect(2);
+        }
     }
 
     //初始化Tab，三步走，控件、数据源、适配器

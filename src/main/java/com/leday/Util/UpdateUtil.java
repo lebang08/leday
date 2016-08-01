@@ -4,21 +4,6 @@ package com.leday.Util;
  * Created by Administrator on 2016/6/24.
  */
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.android.volley.Request.Method;
-import com.android.volley.Response.Listener;
-import com.android.volley.toolbox.StringRequest;
-import com.leday.R;
-import com.leday.application.MyApplication;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -35,6 +20,21 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
+
+import com.android.volley.Request.Method;
+import com.android.volley.Response.Listener;
+import com.android.volley.toolbox.StringRequest;
+import com.leday.R;
+import com.leday.application.MyApplication;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class UpdateUtil {
 
@@ -55,7 +55,7 @@ public class UpdateUtil {
     private Context mcontext;
 
     public UpdateUtil(Context context) {
-        mcontext = context;
+        this.mcontext = context;
     }
 
     @SuppressLint("HandlerLeak")
@@ -130,7 +130,7 @@ public class UpdateUtil {
             localVersion = mcontext.getPackageManager().getPackageInfo("com.leday", 0).versionName;
             //将该数据保存如sharepreference，留用
             PreferenUtil.put(mcontext, "localVersion", mcontext.getPackageManager().getPackageInfo("com.leday", 0).versionName);
-            LogUtil.e("localVersion", "localVersion = " + localVersion);
+            LogUtil.e("localVersion", "localVersion = " + localVersion + "||" + serverVersion);
         } catch (NameNotFoundException e) {
             e.printStackTrace();
         }

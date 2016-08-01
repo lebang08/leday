@@ -13,12 +13,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
-import android.view.animation.TranslateAnimation;
 
 import com.leday.R;
 import com.leday.Util.LogUtil;
 import com.leday.Util.PreferenUtil;
 import com.leday.Util.UpdateUtil;
+import com.umeng.analytics.MobclickAgent;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener {
 
@@ -36,6 +36,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         MainActivity.this.finish();
                     }
                 }).setNegativeButton("返回", null).show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override
@@ -59,8 +71,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mFab2.setOnLongClickListener(this);
         mFab3.setOnLongClickListener(this);
         initDisplay();
+        showThankOnce();
+    }
 
-
+    /**
+     * 根据preference字段展示一次感谢
+     */
+    private void showThankOnce() {
+        boolean isThank = PreferenUtil.contains(MainActivity.this, "thankonce");
+        if (isThank == false) {
+            PreferenUtil.put(MainActivity.this, "thankonce", "20160801");
+            new AlertDialog.Builder(MainActivity.this).setTitle("一封简短的感谢信").setMessage(
+                    "说心里话，没有美工，功能也暂还很简单的一个应用,\n" +
+                            "能一直获得您的支持，在下非常感激,\n" +
+                            "您觉得Le该如何改进呢？\n" +
+                            "真挚希望能收到您的意见\n" +
+                            "具体请看 -> '关于'板块。\n" +
+                            "或许，Le可以成为您的定制应用哦!"
+            ).setPositiveButton("知道啦", null).show();
+        }
     }
 
     /**
@@ -79,46 +108,58 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab1_activity_main:
-                Animator mAnimator1 = ObjectAnimator.ofFloat(v, "translationY", 0, mDisplayMetric.heightPixels / 2 - 128);
+                Animator mAnimator1 = ObjectAnimator.ofFloat(v, "translationY", 0, mDisplayMetric.heightPixels / 2 - mDisplayMetric.heightPixels / 8);
                 mAnimator1.setDuration(2000);
                 mAnimator1.setInterpolator(new BounceInterpolator());
                 mAnimator1.start();
-                ShowSnack(v, "#336699");
+                ShowSnack(v, "today", "#336699");
                 break;
             case R.id.fab2_activity_main:
-                Animator mAnimator2 = ObjectAnimator.ofFloat(v, "translationY", 0, mDisplayMetric.heightPixels / 2 - 128);
+                Animator mAnimator2 = ObjectAnimator.ofFloat(v, "translationY", 0, mDisplayMetric.heightPixels / 2 - mDisplayMetric.heightPixels / 8);
                 mAnimator2.setDuration(2000);
                 mAnimator2.setInterpolator(new BounceInterpolator());
                 mAnimator2.start();
-                ShowSnack(v, "#ffffff");
+                ShowSnack(v, "star", "#ffffff");
                 break;
             case R.id.fab3_activity_main:
-                Animator mAnimator3 = ObjectAnimator.ofFloat(v, "translationY", 0, mDisplayMetric.heightPixels / 2 - 128);
+                Animator mAnimator3 = ObjectAnimator.ofFloat(v, "translationY", 0, mDisplayMetric.heightPixels / 2 - mDisplayMetric.heightPixels / 8);
                 mAnimator3.setDuration(2000);
                 mAnimator3.setInterpolator(new BounceInterpolator());
                 mAnimator3.start();
-                ShowSnack(v, "#339966");
+                ShowSnack(v, "wechat", "#339966");
                 break;
         }
     }
 
     //抽出方法Snack
-    private void ShowSnack(View v, String color) {
+    private void ShowSnack(View v, final String content, String color) {
         Snackbar.make(v, "长按小球2秒进入下一页", Snackbar.LENGTH_LONG).setActionTextColor(Color.parseColor(color)).setAction("或者戳我", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToTabActivity();
+                ToTabActivity(content);
             }
         }).show();
     }
 
     @Override
     public boolean onLongClick(View v) {
-        ToTabActivity();
+        switch (v.getId()) {
+            case R.id.fab1_activity_main:
+                ToTabActivity("today");
+                break;
+            case R.id.fab2_activity_main:
+                ToTabActivity("star");
+                break;
+            case R.id.fab3_activity_main:
+                ToTabActivity("wechat");
+                break;
+        }
         return true;
     }
 
-    private void ToTabActivity() {
-        startActivity(new Intent(MainActivity.this, TabActivity.class));
+    private void ToTabActivity(String content) {
+        Intent intent = new Intent(MainActivity.this, TabActivity.class);
+        intent.putExtra("content", content);
+        startActivity(intent);
     }
 }

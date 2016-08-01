@@ -120,10 +120,6 @@ public class FragmentB extends Fragment implements AdapterView.OnItemClickListen
 
     @Override
     public void onClick(View v) {
-        Snackbar.make(v, "友情提醒：命运是可以改变的!", Snackbar.LENGTH_LONG).setAction("别信我", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        }).show();
+        Snackbar.make(v, "友情提醒：命运是可以改变的!", Snackbar.LENGTH_LONG).show();
     }
 }

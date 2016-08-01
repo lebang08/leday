@@ -6,11 +6,12 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name=".application.MyApplication"
         android:allowBackup="true"
-        android:icon="@drawable/img_threepoint"
+        android:icon="@drawable/img_threepoint512"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -42,7 +43,15 @@
         <activity
             android:name=".activity.TalkActivity"
             android:label="挨骂替身" />
-        <activity android:name=".activity.BaseActivity"></activity>
+        <activity android:name=".activity.BaseActivity" />
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="579eadc267e58ed31f0009b8"></meta-data>
+
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="ALL" />
     </application>
 
 </manifest>
