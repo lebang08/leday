@@ -1,8 +1,8 @@
 package com.leday.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,10 +21,10 @@ import com.umeng.analytics.MobclickAgent;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class StarActivity extends AppCompatActivity implements View.OnClickListener {
+public class StarActivity extends Activity implements View.OnClickListener {
 
-    private ImageView mImge;
-    private TextView mTxt;
+    private ImageView mImge, mImgBack;
+    private TextView mTxt, mTitle;
     private Button mBtnToday, mBtnWeek, mBtnTomorrow, mBtnNextweek;
 
     private String localstar;
@@ -61,17 +61,21 @@ public class StarActivity extends AppCompatActivity implements View.OnClickListe
         ToastUtil.showMessage(this, "哇! 快看,是" + localstar + "!");
 
         mImge = (ImageView) findViewById(R.id.img_activity_star);
+        mImgBack = (ImageView) findViewById(R.id.img_star_back);
         mTxt = (TextView) findViewById(R.id.txt_star_content);
+        mTitle = (TextView) findViewById(R.id.txt_star_title);
         mBtnToday = (Button) findViewById(R.id.btn_star_today);
         mBtnWeek = (Button) findViewById(R.id.btn_star_week);
         mBtnTomorrow = (Button) findViewById(R.id.btn_star_tomorrow);
         mBtnNextweek = (Button) findViewById(R.id.btn_star_nextweek);
 
+        mImgBack.setOnClickListener(this);
         mBtnToday.setOnClickListener(this);
         mBtnWeek.setOnClickListener(this);
         mBtnTomorrow.setOnClickListener(this);
         mBtnNextweek.setOnClickListener(this);
 
+        mTitle.setText(localstar);
         setImgView(localimgId);
     }
 
@@ -173,6 +177,9 @@ public class StarActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.img_star_back:
+                finish();
+                break;
             case R.id.btn_star_today:
                 localtime = "today";
                 getJson();

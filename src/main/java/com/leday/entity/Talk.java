@@ -9,7 +9,17 @@ public class Talk {
 
     private String name;
     private String msg;
+    private String time;
     private Type type;
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
     private Date date;
 
     public enum Type {
@@ -47,13 +57,5 @@ public class Talk {
 
     public void setType(Type type) {
         this.type = type;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
 }

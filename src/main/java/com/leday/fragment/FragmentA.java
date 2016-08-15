@@ -108,7 +108,8 @@ public class FragmentA extends Fragment implements AdapterView.OnItemClickListen
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(getActivity(), TodayActivity.class);
-        intent.putExtra("locale_id", mTodayList.get(position).getE_id());
+        intent.putExtra("local_id", mTodayList.get(position).getE_id());
+        intent.putExtra("local_title", mTodayList.get(position).getTitle());
         startActivity(intent);
     }
 }

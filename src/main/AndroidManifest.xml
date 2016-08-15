@@ -31,23 +31,15 @@
         <activity
             android:name=".activity.TabActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.TodayActivity"
-            android:label="今时今往" />
-        <activity
-            android:name=".activity.StarActivity"
-            android:label="星座星运" />
-        <activity
-            android:name=".activity.WebViewActivity"
-            android:label="微信微选" />
-        <activity
-            android:name=".activity.TalkActivity"
-            android:label="挨骂替身" />
+        <activity android:name=".activity.TodayActivity" />
+        <activity android:name=".activity.StarActivity" />
+        <activity android:name=".activity.WebViewActivity" />
+        <activity android:name=".activity.TalkActivity" />
         <activity android:name=".activity.BaseActivity" />
 
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="579eadc267e58ed31f0009b8"></meta-data>
+            android:value="579eadc267e58ed31f0009b8" />
 
         <meta-data
             android:name="UMENG_CHANNEL"

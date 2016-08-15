@@ -83,10 +83,8 @@ public class FragmentC extends android.support.v4.app.Fragment implements Adapte
                 wechat.setTitle(obj.getString("title"));
                 wechat.setSource(obj.getString("source"));
                 wechat.setUrl(obj.getString("url"));
-                LogUtil.e(wechat.toString());
                 wechatList.add(wechat);
             }
-            LogUtil.e("linx", wechatList.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -98,8 +96,10 @@ public class FragmentC extends android.support.v4.app.Fragment implements Adapte
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String localurl = wechatList.get(position).getUrl();
+        String localtitle = wechatList.get(position).getTitle();
         Intent intent = new Intent(getActivity(), WebViewActivity.class);
         intent.putExtra("localurl", localurl);
+        intent.putExtra("localtitle", localtitle);
         startActivity(intent);
     }
 }

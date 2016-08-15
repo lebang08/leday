@@ -4,23 +4,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Le"
-        android:textColor="#3f51b5"
-        android:textSize="32sp" />
+        android:src="@drawable/img_star_5" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_animation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="64dp"
         android:onClick="animationWelcome"
         android:src="@android:drawable/ic_dialog_dialer"
         app:backgroundTint="#3f51b5"
         app:rippleColor="#ff8dff" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="32dp"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/dot_welcome_a"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/dot_empty" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/dot_welcome_a"
+            android:src="@drawable/dot_full" />
+    </RelativeLayout>
 
 </FrameLayout>

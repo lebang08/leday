@@ -1,9 +1,12 @@
 package com.leday.activity;
 
+import android.app.Activity;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
@@ -12,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.leday.R;
+import com.leday.Util.PreferenUtil;
 import com.leday.Util.TalkHttpUtils;
 import com.leday.Util.ToastUtil;
 import com.leday.adapter.TalkAdapter;
@@ -19,29 +23,39 @@ import com.leday.application.MyApplication;
 import com.leday.entity.Talk;
 import com.umeng.analytics.MobclickAgent;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class TalkActivity extends AppCompatActivity {
+public class TalkActivity extends Activity {
 
     private EditText mInputMsg;
     private Button mSendMsg;
 
-    private ListView mMsgs;
+    private ListView mListView;
     private TalkAdapter mAdapter;
     private List<Talk> mDatas;
 
+    //TODO 数据库乱序，原因应该是数据库语法不熟悉，查询/新增/修改优化
     private Handler mHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             //等待接收，子线程完成数据的返回
             Talk fromMessge = (Talk) msg.obj;
             mDatas.add(fromMessge);
             mAdapter.notifyDataSetChanged();
-            mMsgs.setSelection(mDatas.size() - 1);
+            mListView.setSelection(mDatas.size() - 1);
+            //这里将返回的消息放入数据库
+            SQLiteDatabase mDatabase = openOrCreateDatabase("talked.db", MODE_PRIVATE, null);
+            mDatabase.execSQL("create table if not exists talktb(_id integer primary key autoincrement,message text not null,type text not null,time text not null)");
+            ContentValues mValues = new ContentValues();
+            mValues.put("message", fromMessge.getMsg());
+            mValues.put("type", fromMessge.getType().toString());
+            mValues.put("time", fromMessge.getTime().toString());
+            mDatabase.insert("talktb", null, mValues);
+            mValues.clear();
+            mDatabase.close();
         }
-
-        ;
     };
 
     @Override
@@ -68,23 +82,53 @@ public class TalkActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_talk);
 
+        //初始化控件
         initView();
+        //初始化聊天记录
         initDatas();
         // 初始化事件
         initListener();
     }
 
     private void initView() {
-        mMsgs = (ListView) findViewById(R.id.id_listview_msgs);
+        mListView = (ListView) findViewById(R.id.id_listview_msgs);
         mInputMsg = (EditText) findViewById(R.id.id_input_msg);
         mSendMsg = (Button) findViewById(R.id.id_send_msg);
     }
 
     private void initDatas() {
         mDatas = new ArrayList<>();
-        mDatas.add(new Talk("客官，您好，我是挨骂替身小图灵", Talk.Type.INCOMING, new Date()));
-        mAdapter = new TalkAdapter(this, mDatas);
-        mMsgs.setAdapter(mAdapter);
+        //是否第一次进入聊天，是则欢迎，不是则聊天记录
+        boolean b = PreferenUtil.contains(TalkActivity.this, "mDatabase");
+        if (b == false) {
+            mDatas.add(new Talk("客官，您好，我是挨骂替身小图灵", Talk.Type.INCOMING, new Date()));
+            mAdapter = new TalkAdapter(this, mDatas);
+            mListView.setAdapter(mAdapter);
+        } else {
+            Talk talk;
+            // 此处应该调入数据库
+            SQLiteDatabase mDatabase = openOrCreateDatabase("talked.db", MODE_PRIVATE, null);
+            //数据库查询
+            Cursor mCursor = mDatabase.query("talktb", null, "_id>?", new String[]{"0"}, null, null, "message");
+            if (mCursor != null) {
+                String[] columns = mCursor.getColumnNames();
+                while (mCursor.moveToNext()) {
+                    talk = new Talk();
+                    talk.setMsg(mCursor.getString(mCursor.getColumnIndex("message")));
+                    if (TextUtils.equals(mCursor.getString(mCursor.getColumnIndex("type")), "INCOMING")) {
+                        talk.setType(Talk.Type.INCOMING);
+                    } else {
+                        talk.setType(Talk.Type.OUTCOMING);
+                    }
+                    talk.setTime(mCursor.getString(mCursor.getColumnIndex("time")));
+                    mDatas.add(talk);
+                }
+                mCursor.close();
+            }
+            mDatabase.close();
+            mAdapter = new TalkAdapter(this, mDatas);
+            mListView.setAdapter(mAdapter);
+        }
     }
 
     private void initListener() {
@@ -97,14 +141,27 @@ public class TalkActivity extends AppCompatActivity {
                     return;
                 }
 
+                SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String localdate = dateformat.format(new Date());
                 Talk toMessage = new Talk();
-                toMessage.setDate(new Date());
+                toMessage.setTime(localdate);
                 toMessage.setType(Talk.Type.OUTCOMING);
                 toMessage.setMsg(toMsg);
+                // 这里将发送的数据放入数据库
+                PreferenUtil.put(TalkActivity.this, "mDatabase", "exist");
+                SQLiteDatabase mDatabase = openOrCreateDatabase("talked.db", MODE_PRIVATE, null);
+                mDatabase.execSQL("create table if not exists talktb(_id integer primary key autoincrement,message text not null,type text not null,time text not null)");
+                ContentValues mValues = new ContentValues();
+                mValues.put("message", toMessage.getMsg());
+                mValues.put("type", toMessage.getType().toString());
+                mValues.put("time", toMessage.getTime().toString());
+                mDatabase.insert("talktb", null, mValues);
+                mValues.clear();
+
                 //数据中加入toMessage对象，发送消息
                 mDatas.add(toMessage);
                 mAdapter.notifyDataSetChanged();
-                mMsgs.setSelection(mDatas.size() - 1);
+                mListView.setSelection(mDatas.size() - 1);
 
                 //发送后置空消息EditText中的消息
                 mInputMsg.setText("");
@@ -122,5 +179,9 @@ public class TalkActivity extends AppCompatActivity {
                 }.start();
             }
         });
+    }
+
+    public void close(View view) {
+        finish();
     }
 }

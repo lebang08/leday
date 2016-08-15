@@ -1,22 +1,26 @@
 package com.leday.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 
 import com.leday.R;
 import com.umeng.analytics.MobclickAgent;
 
-public class WebViewActivity extends AppCompatActivity {
+public class WebViewActivity extends Activity {
 
     private WebView mWebView;
-    private String localurl;
+    private TextView mTitle;
+
+    private String localurl, localtitle;
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -54,8 +58,11 @@ public class WebViewActivity extends AppCompatActivity {
     private void initView() {
         Intent intent = getIntent();
         localurl = intent.getStringExtra("localurl");
+        localtitle = intent.getStringExtra("localtitle");
 
         mWebView = (WebView) findViewById(R.id.webview_activity);
+        mTitle = (TextView) findViewById(R.id.txt_webview_title);
+        mTitle.setText(localtitle);
     }
 
     private void initEvent() {
@@ -81,5 +88,9 @@ public class WebViewActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    public void close(View view) {
+        finish();
     }
 }

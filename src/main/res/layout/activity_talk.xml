@@ -1,18 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.leday.activity.TalkActivity">
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#3f51b5">
+
+        <TextView
+            android:id="@+id/txt_talk_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="64dp"
+            android:layout_marginRight="64dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="百事通小图灵"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/img_talk_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
+            android:onClick="close"
+            android:src="@drawable/arrow_white_back" />
+    </FrameLayout>
+
+    <ListView
+        android:id="@+id/id_listview_msgs"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1"
+        android:divider="@null"
+        android:dividerHeight="5dp" />
 
     <RelativeLayout
         android:id="@+id/id_ly_bottom"
         android:layout_width="fill_parent"
         android:layout_height="56dp"
-        android:layout_alignParentBottom="true"
         android:focusable="true"
         android:focusableInTouchMode="true">
 
@@ -36,11 +71,5 @@
             android:textSize="18sp" />
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/id_listview_msgs"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/id_ly_bottom"
-        android:divider="@null"
-        android:dividerHeight="5dp" />
-</RelativeLayout>
+
+</LinearLayout>

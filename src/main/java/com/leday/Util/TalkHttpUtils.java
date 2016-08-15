@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TalkHttpUtils {
@@ -31,7 +32,9 @@ public class TalkHttpUtils {
         } catch (JSONException e) {
             talk.setMsg("网络不佳，再试试呗");
         }
-        talk.setDate(new Date());
+        SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String localdate = dateformat.format(new Date());
+        talk.setTime(localdate);
         talk.setType(Talk.Type.INCOMING);
         return talk;
     }

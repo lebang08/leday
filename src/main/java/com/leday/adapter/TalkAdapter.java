@@ -79,8 +79,7 @@ public class TalkAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         // 设置数据
-        SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        viewHolder.mDate.setText(dateformat.format(talk.getDate()));
+        viewHolder.mDate.setText(talk.getTime());
         viewHolder.mMsg.setText(talk.getMsg());
         return convertView;
     }
