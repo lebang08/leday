@@ -110,6 +110,7 @@ public class FragmentA extends Fragment implements AdapterView.OnItemClickListen
         Intent intent = new Intent(getActivity(), TodayActivity.class);
         intent.putExtra("local_id", mTodayList.get(position).getE_id());
         intent.putExtra("local_title", mTodayList.get(position).getTitle());
+        intent.putExtra("local_date", mTodayList.get(position).getDate());
         startActivity(intent);
     }
 }

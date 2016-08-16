@@ -46,7 +46,7 @@ public class TalkActivity extends Activity {
             mAdapter.notifyDataSetChanged();
             mListView.setSelection(mDatas.size() - 1);
             //这里将返回的消息放入数据库
-            SQLiteDatabase mDatabase = openOrCreateDatabase("talked.db", MODE_PRIVATE, null);
+            SQLiteDatabase mDatabase = openOrCreateDatabase("leday.db", MODE_PRIVATE, null);
             mDatabase.execSQL("create table if not exists talktb(_id integer primary key autoincrement,message text not null,type text not null,time text not null)");
             ContentValues mValues = new ContentValues();
             mValues.put("message", fromMessge.getMsg());
@@ -107,7 +107,7 @@ public class TalkActivity extends Activity {
         } else {
             Talk talk;
             // 此处应该调入数据库
-            SQLiteDatabase mDatabase = openOrCreateDatabase("talked.db", MODE_PRIVATE, null);
+            SQLiteDatabase mDatabase = openOrCreateDatabase("leday.db", MODE_PRIVATE, null);
             //数据库查询
             Cursor mCursor = mDatabase.query("talktb", null, "_id>?", new String[]{"0"}, null, null, "message");
             if (mCursor != null) {
@@ -149,7 +149,7 @@ public class TalkActivity extends Activity {
                 toMessage.setMsg(toMsg);
                 // 这里将发送的数据放入数据库
                 PreferenUtil.put(TalkActivity.this, "mDatabase", "exist");
-                SQLiteDatabase mDatabase = openOrCreateDatabase("talked.db", MODE_PRIVATE, null);
+                SQLiteDatabase mDatabase = openOrCreateDatabase("leday.db", MODE_PRIVATE, null);
                 mDatabase.execSQL("create table if not exists talktb(_id integer primary key autoincrement,message text not null,type text not null,time text not null)");
                 ContentValues mValues = new ContentValues();
                 mValues.put("message", toMessage.getMsg());
@@ -157,6 +157,7 @@ public class TalkActivity extends Activity {
                 mValues.put("time", toMessage.getTime().toString());
                 mDatabase.insert("talktb", null, mValues);
                 mValues.clear();
+                mDatabase.close();
 
                 //数据中加入toMessage对象，发送消息
                 mDatas.add(toMessage);

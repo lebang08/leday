@@ -7,7 +7,6 @@ import java.io.Serializable;
  */
 public class Today implements Serializable {
 
-    private String day;
     private String date;
     private String e_id;
     private String title;
@@ -16,18 +15,9 @@ public class Today implements Serializable {
     }
 
     public Today(String day, String date, String e_id, String title) {
-        this.day = day;
         this.date = date;
         this.e_id = e_id;
         this.title = title;
-    }
-
-    public String getDay() {
-        return day;
-    }
-
-    public void setDay(String day) {
-        this.day = day;
     }
 
     public String getDate() {
@@ -57,7 +47,6 @@ public class Today implements Serializable {
     @Override
     public String toString() {
         return "Today{" +
-                "day='" + day + '\'' +
                 ", date='" + date + '\'' +
                 ", e_id='" + e_id + '\'' +
                 ", title='" + title + '\'' +

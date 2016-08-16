@@ -1,7 +1,9 @@
 package com.leday.activity;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -28,9 +30,9 @@ public class TodayActivity extends Activity implements View.OnClickListener {
     private ImageView mImgBack;
     private ViewFlipper mViewFlipper;
 
-    private String local_id, local_title;
+    private String local_id, local_title , local_date;
     private static final String URL = "http://v.juhe.cn/todayOnhistory/queryDetail.php?key=776cbc23ec84837a647a7714a0f06bff&e_id=";
-    private String localcontent;
+    private String local_content;
 
     @Override
     protected void onStop() {
@@ -63,6 +65,7 @@ public class TodayActivity extends Activity implements View.OnClickListener {
         Intent intent = getIntent();
         local_id = intent.getStringExtra("local_id");
         local_title = intent.getStringExtra("local_title");
+        local_date = intent.getStringExtra("local_date");
 
         mContent = (TextView) findViewById(R.id.content_activity_today);
         mTitle = (TextView) findViewById(R.id.txt_Today_title);
@@ -100,9 +103,8 @@ public class TodayActivity extends Activity implements View.OnClickListener {
             obj = new JSONObject(response);
             arr = obj.getJSONArray("result");
             obj = arr.getJSONObject(0);
-            localcontent = obj.getString("content");
-            mContent.setText(localcontent);
-            String picnumber = obj.getString("picNo");
+            local_content = obj.getString("content");
+            mContent.setText(local_content);
             arr = obj.getJSONArray("picUrl");
             if (arr.length() == 0) {
                 mViewFlipper.setVisibility(View.GONE);
@@ -123,8 +125,17 @@ public class TodayActivity extends Activity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.txt_Today_like:
-                //TODO 再做一张表放入数据库中
-                Snackbar.make(view, "收藏成功" + localcontent, Snackbar.LENGTH_SHORT).show();
+                //建一张表保存文章
+                SQLiteDatabase mDatabase = openOrCreateDatabase("leday.db",MODE_PRIVATE,null);
+                mDatabase.execSQL("create table if not exists todaytb(_id integer primary key autoincrement,date text not null,title text not null,content text not null)");
+                ContentValues mValues = new ContentValues();
+                mValues.put("date", local_date);
+                mValues.put("title", local_title);
+                mValues.put("content", local_content);
+                mDatabase.insert("todaytb",null,mValues);
+                mValues.clear();
+                mDatabase.close();
+                Snackbar.make(view, "收藏成功" + local_content, Snackbar.LENGTH_SHORT).show();
                 break;
             case R.id.img_today_back:
                 finish();

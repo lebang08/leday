@@ -20,6 +20,7 @@ import android.widget.ListView;
 import com.leday.Impl.ListViewHightImpl;
 import com.leday.R;
 import com.leday.Util.ToastUtil;
+import com.leday.activity.FavoriteActivity;
 import com.leday.activity.TalkActivity;
 
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class FragmentD extends Fragment implements AdapterView.OnItemClickListen
     }
 
     private void initData() {
-        mData.add("程序想说感谢");
+        mData.add("我的收藏");
         mData.add("我没有想到");
         mData.add("只做了简单小功能的Le");
         mData.add("能一直获得您的支持");
@@ -98,15 +99,18 @@ public class FragmentD extends Fragment implements AdapterView.OnItemClickListen
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (position == 0 || position == 15 || position == 16) {
+        if (position == 0) {
+            startActivity(new Intent(getActivity(),FavoriteActivity.class));
+        } else if(position == 15 || position == 16){
             /**
              *这两个事件，打开QQ
              */
             boolean isExist = isApkInstalled(getActivity(), "com.tencent.mobileqq");
             talkQQ(isExist);
-        } else {
-            //其余选项事件
-            doSnackbar(view, "前往勾搭小图灵", "Go");
+        }else{
+            //其余选项事件,前往图灵
+            startActivity(new Intent(getActivity(), TalkActivity.class));
+//            doSnackbar(view, "前往勾搭小图灵", "Go");
         }
     }
 

@@ -95,11 +95,9 @@ public class FragmentC extends android.support.v4.app.Fragment implements Adapte
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        String localurl = wechatList.get(position).getUrl();
-        String localtitle = wechatList.get(position).getTitle();
         Intent intent = new Intent(getActivity(), WebViewActivity.class);
-        intent.putExtra("localurl", localurl);
-        intent.putExtra("localtitle", localtitle);
+        intent.putExtra("localurl", wechatList.get(position).getUrl());
+        intent.putExtra("localtitle", wechatList.get(position).getTitle());
         startActivity(intent);
     }
 }
