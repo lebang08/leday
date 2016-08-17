@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.leday.R;
 import com.leday.entity.Talk;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class TalkAdapter extends BaseAdapter {
@@ -54,7 +53,7 @@ public class TalkAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Talk talk = mDatas.get(position);
-        ViewHolder viewHolder = null;
+        ViewHolder viewHolder;
         if (convertView == null) {
             // 通过ItemType设置不同的布局
             if (getItemViewType(position) == 0) {
@@ -84,7 +83,7 @@ public class TalkAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private final class ViewHolder {
+    private class ViewHolder {
         TextView mDate;
         TextView mMsg;
     }

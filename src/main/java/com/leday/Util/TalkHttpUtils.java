@@ -17,7 +17,7 @@ public class TalkHttpUtils {
     /**
      * 发送一个消息，得到返回的消息
      * @param msg
-     * @return
+     * @return talk
      */
     public static Talk sendMessage(String msg) {
         Talk talk = new Talk();
@@ -39,7 +39,7 @@ public class TalkHttpUtils {
         return talk;
     }
 
-    public static String doGet(String msg) {
+    private static String doGet(String msg) {
         String result = "";
         String url = URL + msg;
         ByteArrayOutputStream baos = null;

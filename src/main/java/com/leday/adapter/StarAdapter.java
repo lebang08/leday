@@ -12,9 +12,6 @@ import com.leday.R;
 
 import java.util.List;
 
-/**
- * Created by Administrator on 2016/6/20.
- */
 public class StarAdapter extends BaseAdapter {
 
     private List<String> mList;
@@ -94,8 +91,8 @@ public class StarAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public class ViewHold {
-        public TextView mContent;
-        public ImageView mImg;
+    private class ViewHold {
+        private TextView mContent;
+        private ImageView mImg;
     }
 }

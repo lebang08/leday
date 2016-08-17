@@ -32,13 +32,17 @@ import java.util.List;
 public class FragmentA extends Fragment implements AdapterView.OnItemClickListener {
 
     private ListView mListView;
-    private ArrayAdapter mAdapter;
     private List<String> mDataList = new ArrayList<>();
     private List<Today> mTodayList = new ArrayList<>();
 
     private Calendar mCalendar = Calendar.getInstance();
-    private static final String URL = "http://v.juhe.cn/todayOnhistory/queryEvent.php?key=776cbc23ec84837a647a7714a0f06bff&date=";
-    private String URL_TOTAL;
+    private static final String URL_TODAY = "http://v.juhe.cn/todayOnhistory/queryEvent.php?key=776cbc23ec84837a647a7714a0f06bff&date=";
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        MyApplication.getHttpQueue().cancelAll("fragmenta");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,7 +63,7 @@ public class FragmentA extends Fragment implements AdapterView.OnItemClickListen
         //获取时间,月和日
         int localMonth = mCalendar.get(Calendar.MONTH);
         int localDay = mCalendar.get(Calendar.DAY_OF_MONTH);
-        URL_TOTAL = URL + (localMonth + 1) + "/" + localDay;
+        String URL_TOTAL = URL_TODAY + (localMonth + 1) + "/" + localDay;
         //请求网络
         StringRequest todayrequest = new StringRequest(Request.Method.GET, URL_TOTAL, new Response.Listener<String>() {
             @Override
@@ -72,7 +76,7 @@ public class FragmentA extends Fragment implements AdapterView.OnItemClickListen
 
             }
         });
-        todayrequest.setTag("GET");
+        todayrequest.setTag("fragmenta");
         MyApplication.getHttpQueue().add(todayrequest);
     }
 
@@ -100,7 +104,7 @@ public class FragmentA extends Fragment implements AdapterView.OnItemClickListen
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, mDataList);
+        ArrayAdapter mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, mDataList);
         mListView.setAdapter(mAdapter);
         new ListViewHightImpl(mListView).setListViewHeightBasedOnChildren();
     }

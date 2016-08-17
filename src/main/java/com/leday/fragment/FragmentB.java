@@ -21,11 +21,8 @@ import java.util.List;
 
 public class FragmentB extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener {
 
-    private FloatingActionButton mFab;
-
     private ListView mListView;
     private List<String> mData = new ArrayList<>();
-    private StarAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,7 +34,7 @@ public class FragmentB extends Fragment implements AdapterView.OnItemClickListen
     }
 
     private void initView(View view) {
-        mFab = (FloatingActionButton) view.findViewById(R.id.fab_fragment_b);
+        FloatingActionButton mFab = (FloatingActionButton) view.findViewById(R.id.fab_fragment_b);
         mListView = (ListView) view.findViewById(R.id.listview_fragment_b);
 
         mFab.setOnClickListener(this);
@@ -57,7 +54,7 @@ public class FragmentB extends Fragment implements AdapterView.OnItemClickListen
         mData.add("摩羯座 ： 12月22日-1月19日");
         mData.add("水瓶座 ： 1月20日-2月18日");
         mData.add("双鱼座 ： 2月19日-3月20日");
-        mAdapter = new StarAdapter(getActivity(), mData);
+        StarAdapter mAdapter = new StarAdapter(getActivity(), mData);
         mListView.setAdapter(mAdapter);
         new ListViewHightImpl(mListView).setListViewHeightBasedOnChildren();
     }

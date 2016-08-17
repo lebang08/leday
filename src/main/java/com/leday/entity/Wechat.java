@@ -1,7 +1,7 @@
 package com.leday.entity;
 
 /**
- * Created by Administrator on 2016/6/23.
+ * Created by Administrator on 2016/6/23
  */
 public class Wechat {
     private String id;

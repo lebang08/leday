@@ -1,7 +1,7 @@
 package com.leday.Util;
 
 /**
- * Created by Administrator on 2016/6/24.
+ * Created by Administrator on 2016/6/24
  */
 
 import android.app.Activity;

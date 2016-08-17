@@ -1,7 +1,7 @@
 package com.leday.Util;
 
 /**
- * Created by Administrator on 2016/6/24.
+ * Created by Administrator on 2016/8/17
  */
 
 import android.annotation.SuppressLint;
@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -46,9 +47,10 @@ public class UpdateUtil {
     private static final int DOWNLOAD_FINISH = 0;
 
     private String mVersion;
-    private String mVersionURL;
-    private String mMessage;
+    //    private String mVersionURL;
+    //    private String mMessage;
     private String mSavePath;
+    private String mAlreayNew;
     private int mProgress;
     private boolean mIsCancel = false;
 
@@ -56,6 +58,11 @@ public class UpdateUtil {
 
     public UpdateUtil(Context context) {
         this.mcontext = context;
+    }
+
+    public UpdateUtil(Context context, String showCheck) {
+        this.mcontext = context;
+        this.mAlreayNew = showCheck;
     }
 
     @SuppressLint("HandlerLeak")
@@ -71,15 +78,17 @@ public class UpdateUtil {
                     JSONArray data = jsonObject.getJSONArray("data");
                     jsonObject = data.getJSONObject(0);
                     mVersion = jsonObject.getString("version");
-                    mVersionURL = jsonObject.getString("apkurl");
-                    mMessage = jsonObject.getString("detail");
-                    LogUtil.e("mVersionURL", "VersionURL = " + mVersionURL);
+//                    mVersionURL = jsonObject.getString("apkurl");
+//                    mMessage = jsonObject.getString("detail");
+//                    LogUtil.e("mVersionURL", "VersionURL = " + mVersionURL);
                 }
 //				LogUtil.e("version", "远程version = " + mVersion);
                 if (isUpdate()) {
                     showNoticeDialog();
                 } else {
-//                    ToastUtil.showMessage(mcontext, "当前是最新版本" + PreferenUtil.get(mcontext, "localVersion", ""));
+                    if (!TextUtils.isEmpty(mAlreayNew)) {
+                        ToastUtil.showMessage(mcontext, "已经是最新版本啦");
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -100,8 +109,6 @@ public class UpdateUtil {
                     break;
             }
         }
-
-        ;
     };
 
     public void checkUpdate() {
@@ -113,12 +120,12 @@ public class UpdateUtil {
                 mGetVersionHandler.sendMessage(msg);
             }
         }, null);
-        request.setTag("post");
+        request.setTag("updateutil");
         MyApplication.getHttpQueue().add(request);
     }
 
     //boolean比较本地版本是否需要更新
-    public boolean isUpdate() {
+    private boolean isUpdate() {
         float serverVersion = Float.parseFloat(mVersion);
         //将该数据保存如sharepreference，留用
         PreferenUtil.put(mcontext, "serverVersion", String.valueOf(serverVersion));
@@ -134,16 +141,12 @@ public class UpdateUtil {
         } catch (NameNotFoundException e) {
             e.printStackTrace();
         }
-        if (serverVersion > Float.parseFloat(localVersion)) {
-            return true;
-        } else {
-            return false;
-        }
+        return serverVersion > Float.parseFloat(localVersion);
     }
 
     @SuppressLint("InlinedApi")
     @SuppressWarnings("deprecation")
-    protected void showNoticeDialog() {     //show 弹窗供选择是否更新
+    private void showNoticeDialog() {     //show 弹窗供选择是否更新
         AlertDialog.Builder builder = new Builder(mcontext, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
         builder.setTitle("发现新版本");
 //        builder.setMessage(mMessage);
@@ -167,7 +170,7 @@ public class UpdateUtil {
 
     @SuppressWarnings("deprecation")
     @SuppressLint({"InflateParams", "InlinedApi"})
-    protected void showDownloadDialog() {     //显示下载进度
+    private void showDownloadDialog() {     //显示下载进度
         AlertDialog.Builder builder = new Builder(mcontext, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
         builder.setTitle("下载中");
 

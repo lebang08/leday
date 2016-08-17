@@ -15,10 +15,11 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/icon_home"
+            android:id="@+id/icon_tab_a"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="false" />
+            android:clickable="false"
+            android:src="@drawable/icon_tabone" />
 
         <TextView
             android:id="@+id/txt_tab_a"
@@ -39,10 +40,11 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/icon_social"
+            android:id="@+id/icon_tab_b"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="false" />
+            android:clickable="false"
+            android:src="@drawable/icon_tabtwo" />
 
         <TextView
             android:id="@+id/txt_tab_b"
@@ -55,22 +57,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearlayout_tab_c"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <ImageView
-            android:id="@+id/icon_ad"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="false" />
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/linearlayout_tab_d"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -79,10 +65,11 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/icon_client"
+            android:id="@+id/icon_tab_d"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="false" />
+            android:clickable="false"
+            android:src="@drawable/icon_tabthree" />
 
         <TextView
             android:id="@+id/txt_tab_d"
@@ -103,10 +90,11 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/icon_mine"
+            android:id="@+id/icon_tab_e"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="false" />
+            android:clickable="false"
+            android:src="@drawable/icon_tabfour" />
 
         <TextView
             android:id="@+id/txt_tab_e"

@@ -1,24 +1,39 @@
 package com.leday.activity;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
 
-public class BaseActivity extends AppCompatActivity {
+import com.umeng.analytics.MobclickAgent;
+
+public class BaseActivity extends Activity {
+
+//    private boolean isFirst = true;
+//    private long lastTime;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
 //    @Override
 //    public void onBackPressed() {
-//        new AlertDialog.Builder(this).setTitle("确认退出吗？").setIcon(android.R.drawable.ic_dialog_info)
-//                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        BaseActivity.this.finish();
-//                    }
-//                }).setNegativeButton("返回", null).show();
+//        if (isFirst) {
+//            ToastUtil.showMessage(this, "再按一次退出程序");
+//            lastTime = System.currentTimeMillis();
+//            isFirst = false;
+//        } else {
+//            if ((System.currentTimeMillis() - lastTime) < 2000) {
+//                this.finish();
+//            } else {
+//                ToastUtil.showMessage(this, "再按一次退出程序");
+//                lastTime = System.currentTimeMillis();
+//            }
+//        }
 //    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
 }

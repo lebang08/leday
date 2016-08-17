@@ -10,7 +10,7 @@
         android:background="#3f51b5">
 
         <TextView
-            android:id="@+id/txt_webview_title"
+            android:id="@+id/txt_webviewdetail_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -24,7 +24,7 @@
             android:textSize="18sp" />
 
         <ImageView
-            android:id="@+id/img_webview_back"
+            android:id="@+id/img_webviewdetail_back"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
@@ -33,17 +33,28 @@
             android:src="@drawable/arrow_white_back" />
 
         <TextView
-            android:id="@+id/txt_webview_like"
+            android:id="@+id/txt_webviewdetail_like"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
             android:layout_marginRight="8dp"
-            android:text="收藏"
+            android:text="取消收藏"
             android:textColor="#ffffff" />
     </FrameLayout>
 
+    <TextView
+        android:id="@+id/txt_webviewdetail_url"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
+        android:textColor="#3f51b5"
+        android:textIsSelectable="true"
+        android:textSize="16sp" />
+
     <WebView
-        android:id="@+id/webview_activity"
+        android:id="@+id/webviewdetail_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

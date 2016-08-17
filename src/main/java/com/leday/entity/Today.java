@@ -3,7 +3,7 @@ package com.leday.entity;
 import java.io.Serializable;
 
 /**
- * Created by Administrator on 2016/6/8.
+ * Created by Administrator on 2016/6/8
  */
 public class Today implements Serializable {
 

@@ -1,6 +1,5 @@
 package com.leday.activity;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -21,14 +20,13 @@ import com.leday.Util.ToastUtil;
 import com.leday.adapter.TalkAdapter;
 import com.leday.application.MyApplication;
 import com.leday.entity.Talk;
-import com.umeng.analytics.MobclickAgent;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class TalkActivity extends Activity {
+public class TalkActivity extends BaseActivity {
 
     private EditText mInputMsg;
     private Button mSendMsg;
@@ -51,7 +49,7 @@ public class TalkActivity extends Activity {
             ContentValues mValues = new ContentValues();
             mValues.put("message", fromMessge.getMsg());
             mValues.put("type", fromMessge.getType().toString());
-            mValues.put("time", fromMessge.getTime().toString());
+            mValues.put("time", fromMessge.getTime());
             mDatabase.insert("talktb", null, mValues);
             mValues.clear();
             mDatabase.close();
@@ -62,18 +60,6 @@ public class TalkActivity extends Activity {
     protected void onStop() {
         super.onStop();
         MyApplication.getHttpQueue().cancelAll("GET");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPause(this);
     }
 
     @Override
@@ -100,7 +86,7 @@ public class TalkActivity extends Activity {
         mDatas = new ArrayList<>();
         //是否第一次进入聊天，是则欢迎，不是则聊天记录
         boolean b = PreferenUtil.contains(TalkActivity.this, "mDatabase");
-        if (b == false) {
+        if (!b) {
             mDatas.add(new Talk("客官，您好，我是挨骂替身小图灵", Talk.Type.INCOMING, new Date()));
             mAdapter = new TalkAdapter(this, mDatas);
             mListView.setAdapter(mAdapter);
@@ -154,7 +140,7 @@ public class TalkActivity extends Activity {
                 ContentValues mValues = new ContentValues();
                 mValues.put("message", toMessage.getMsg());
                 mValues.put("type", toMessage.getType().toString());
-                mValues.put("time", toMessage.getTime().toString());
+                mValues.put("time", toMessage.getTime());
                 mDatabase.insert("talktb", null, mValues);
                 mValues.clear();
                 mDatabase.close();
@@ -175,8 +161,6 @@ public class TalkActivity extends Activity {
                         msg.obj = fromMessage;
                         mHandler.sendMessage(msg);
                     }
-
-                    ;
                 }.start();
             }
         });

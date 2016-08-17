@@ -3,7 +3,7 @@ package com.leday.entity;
 import java.util.Date;
 
 /**
- * Created by Administrator on 2016/6/27.
+ * Created by Administrator on 2016/6/27
  */
 public class Talk {
 
@@ -11,17 +11,7 @@ public class Talk {
     private String msg;
     private String time;
     private Type type;
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
     private Date date;
-
     public enum Type {
         INCOMING, OUTCOMING;
     }
@@ -57,5 +47,13 @@ public class Talk {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

@@ -31,9 +31,14 @@ public class FragmentC extends android.support.v4.app.Fragment implements Adapte
 
     private ListView mListView;
     private List<Wechat> wechatList = new ArrayList<>();
-    private WechatAdapter mAdapter;
 
-    private static final String URL = "http://v.juhe.cn/weixin/query?key=4d8f538fca6369950978621cf6287bde";
+    private static final String URL_WECHAT = "http://v.juhe.cn/weixin/query?key=4d8f538fca6369950978621cf6287bde";
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        MyApplication.getHttpQueue().cancelAll("fragmentc");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,7 +55,7 @@ public class FragmentC extends android.support.v4.app.Fragment implements Adapte
     }
 
     private void initEvent() {
-        StringRequest filmrequest = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
+        StringRequest filmrequest = new StringRequest(Request.Method.GET, URL_WECHAT, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Dosuccess(response);
@@ -61,7 +66,7 @@ public class FragmentC extends android.support.v4.app.Fragment implements Adapte
                 LogUtil.e("Wrong-BACK", "联接错误原因： " + error.getMessage());
             }
         });
-        filmrequest.setTag("GET");
+        filmrequest.setTag("fragmentc");
         MyApplication.getHttpQueue().add(filmrequest);
     }
 
@@ -88,7 +93,7 @@ public class FragmentC extends android.support.v4.app.Fragment implements Adapte
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        mAdapter = new WechatAdapter(getActivity(), wechatList);
+        WechatAdapter mAdapter = new WechatAdapter(getActivity(), wechatList);
         mListView.setAdapter(mAdapter);
         new ListViewHightImpl(mListView).setListViewHeightBasedOnChildren();
     }

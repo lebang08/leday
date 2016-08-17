@@ -3,8 +3,9 @@ package com.leday.Util;
 import android.util.Log;
 
 /**
- * Created by Administrator on 2016/6/24.
+ * Created by Administrator on 2016/6/24
  */
+
 public class LogUtil {
 
     private LogUtil() {
@@ -12,7 +13,7 @@ public class LogUtil {
         throw new UnsupportedOperationException("cannot be instantiated");
     }
 
-    public static boolean isDebug = true;// 是否需要打印bug，可以在application的onCreate函数里面初始化
+    private static boolean isDebug = true;// 是否需要打印bug，可以在application的onCreate函数里面初始化
     private static final String TAG = "linx";
 
     // 下面四个是默认tag的函数

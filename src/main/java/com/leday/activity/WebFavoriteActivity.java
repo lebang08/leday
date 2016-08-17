@@ -15,7 +15,7 @@ import com.leday.Util.PreferenUtil;
 
 import java.util.ArrayList;
 
-public class FavoriteActivity extends BaseActivity implements AdapterView.OnItemClickListener{
+public class WebFavoriteActivity extends BaseActivity implements AdapterView.OnItemClickListener{
 
     private ArrayList<String> mDataList = new ArrayList<>();
     private ArrayList<String> mContentList = new ArrayList<>();
@@ -32,7 +32,7 @@ public class FavoriteActivity extends BaseActivity implements AdapterView.OnItem
 
     private void initView() {
         ListView mListView = (ListView) findViewById(R.id.listview_activity_favoriter);
-        ArrayAdapter mAdapter = new ArrayAdapter(FavoriteActivity.this, android.R.layout.simple_list_item_1, mDataList);
+        ArrayAdapter mAdapter = new ArrayAdapter(WebFavoriteActivity.this, android.R.layout.simple_list_item_1, mDataList);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
     }
@@ -42,19 +42,18 @@ public class FavoriteActivity extends BaseActivity implements AdapterView.OnItem
 //        if (!tabIsExist("todaytb")) {
 //            return;
 //        }
-        if(!PreferenUtil.contains(FavoriteActivity.this,"todaytb_is_exist")){
+        if(!PreferenUtil.contains(WebFavoriteActivity.this,"wechattb_is_exist")){
             return;
         }
         mDatabase = openOrCreateDatabase("leday.db", MODE_PRIVATE, null);
         //数据库查询
-        Cursor mCursor = mDatabase.query("todaytb", null, "_id>?", new String[]{"0"}, null, null, null);
+        Cursor mCursor = mDatabase.query("wechattb", null, "_id>?", new String[]{"0"}, null, null, null);
         if (mCursor != null) {
             String local_date_title;
             while (mCursor.moveToNext()) {
-                local_date_title = mCursor.getString(mCursor.getColumnIndex("date")) + "："
-                        + mCursor.getString(mCursor.getColumnIndex("title"));
+                local_date_title = mCursor.getString(mCursor.getColumnIndex("title"));
                 mDataList.add(local_date_title);
-                mContentList.add(mCursor.getString(mCursor.getColumnIndex("content")));
+                mContentList.add(mCursor.getString(mCursor.getColumnIndex("url")));
             }
             mCursor.close();
         }
@@ -95,9 +94,9 @@ public class FavoriteActivity extends BaseActivity implements AdapterView.OnItem
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Intent intent = new Intent(FavoriteActivity.this,FavoriteDetailActivity.class);
-        intent.putExtra("local_date_title",mDataList.get(i));
-        intent.putExtra("local_content",mContentList.get(i));
+        Intent intent = new Intent(WebFavoriteActivity.this,WebFavoriteDetailActivity.class);
+        intent.putExtra("local_title",mDataList.get(i));
+        intent.putExtra("local_url",mContentList.get(i));
         startActivity(intent);
     }
 }

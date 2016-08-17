@@ -7,15 +7,17 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.leday.R;
+import com.leday.Util.ToastUtil;
+import com.leday.Util.UpdateUtil;
 import com.leday.fragment.FragmentA;
 import com.leday.fragment.FragmentB;
 import com.leday.fragment.FragmentC;
 import com.leday.fragment.FragmentD;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,24 +25,29 @@ import java.util.List;
 public class TabActivity extends AppCompatActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
     private ViewPager mViewPager;
-    private FragmentPagerAdapter mFragmentAdapter;
     private List<Fragment> mFragmentList;
 
-    private LinearLayout mLinearLayout_a, mLinearLayout_b, mLinearLayout_c, mLinearLayout_d, mLinearLayout_e;
     private TextView mTxt_a, mTxt_b, mTxt_d, mTxt_e;
+    private ImageView mImg_a, mImg_b, mImg_d, mImg_e;
 
-    private String localcontent;
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onResume(this);
-    }
+    //用于检测双击退出程序
+    private boolean isFirst = true;
+    private long lastTime;
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPause(this);
+    public void onBackPressed() {
+        if (isFirst) {
+            ToastUtil.showMessage(this, "再按一次退出程序");
+            lastTime = System.currentTimeMillis();
+            isFirst = false;
+        } else {
+            if ((System.currentTimeMillis() - lastTime) < 2000) {
+                this.finish();
+            } else {
+                ToastUtil.showMessage(this, "再按一次退出程序");
+                lastTime = System.currentTimeMillis();
+            }
+        }
     }
 
     @Override
@@ -48,34 +55,31 @@ public class TabActivity extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
 
+        //检测自动更新
+        new UpdateUtil(this).checkUpdate();
         initTab();
         initView();
     }
 
     private void initView() {
-        localcontent = getIntent().getStringExtra("content");
-        mLinearLayout_a = (LinearLayout) findViewById(R.id.linearlayout_tab_a);
-        mLinearLayout_b = (LinearLayout) findViewById(R.id.linearlayout_tab_b);
-        mLinearLayout_c = (LinearLayout) findViewById(R.id.linearlayout_tab_c);
-        mLinearLayout_d = (LinearLayout) findViewById(R.id.linearlayout_tab_d);
-        mLinearLayout_e = (LinearLayout) findViewById(R.id.linearlayout_tab_e);
+        LinearLayout mLinearLayout_a = (LinearLayout) findViewById(R.id.linearlayout_tab_a);
+        LinearLayout mLinearLayout_b = (LinearLayout) findViewById(R.id.linearlayout_tab_b);
+        LinearLayout mLinearLayout_d = (LinearLayout) findViewById(R.id.linearlayout_tab_d);
+        LinearLayout mLinearLayout_e = (LinearLayout) findViewById(R.id.linearlayout_tab_e);
         mTxt_a = (TextView) findViewById(R.id.txt_tab_a);
         mTxt_b = (TextView) findViewById(R.id.txt_tab_b);
         mTxt_d = (TextView) findViewById(R.id.txt_tab_d);
         mTxt_e = (TextView) findViewById(R.id.txt_tab_e);
+        mImg_a = (ImageView) findViewById(R.id.icon_tab_a);
+        mImg_b = (ImageView) findViewById(R.id.icon_tab_b);
+        mImg_d = (ImageView) findViewById(R.id.icon_tab_d);
+        mImg_e = (ImageView) findViewById(R.id.icon_tab_e);
 
         mLinearLayout_a.setOnClickListener(this);
         mLinearLayout_b.setOnClickListener(this);
-        mLinearLayout_c.setOnClickListener(this);
         mLinearLayout_d.setOnClickListener(this);
         mLinearLayout_e.setOnClickListener(this);
-        if (localcontent.equals("today")) {
-            setSelect(0);
-        } else if (localcontent.equals("star")) {
-            setSelect(1);
-        } else {
-            setSelect(2);
-        }
+        setSelect(0);
     }
 
     //初始化Tab，三步走，控件、数据源、适配器
@@ -93,7 +97,7 @@ public class TabActivity extends AppCompatActivity implements View.OnClickListen
         mFragmentList.add(fragment_c);
         mFragmentList.add(fragment_d);
         //适配器
-        mFragmentAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
+        FragmentPagerAdapter mFragmentAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
                 return mFragmentList.get(position);
@@ -118,8 +122,6 @@ public class TabActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case R.id.linearlayout_tab_b:
                 setSelect(1);
-                break;
-            case R.id.linearlayout_tab_c:
                 break;
             case R.id.linearlayout_tab_d:
                 setSelect(2);
@@ -153,20 +155,33 @@ public class TabActivity extends AppCompatActivity implements View.OnClickListen
     //   Title切换事件
     private void setTabTitle(int i) {
         reSetTextColor();
+        reSetIcon();
         switch (i) {
             case 0:
                 mTxt_a.setTextColor(Color.parseColor("#ffffff"));
+                mImg_a.setImageResource(R.drawable.icon_tabone_light);
                 break;
             case 1:
                 mTxt_b.setTextColor(Color.parseColor("#ffffff"));
+                mImg_b.setImageResource(R.drawable.icon_tabtwo_light);
                 break;
             case 2:
                 mTxt_d.setTextColor(Color.parseColor("#ffffff"));
+                mImg_d.setImageResource(R.drawable.icon_tabthree_light);
                 break;
             case 3:
                 mTxt_e.setTextColor(Color.parseColor("#ffffff"));
+                mImg_e.setImageResource(R.drawable.icon_tabfour_light);
                 break;
         }
+    }
+
+    //重设图片为未选中时
+    private void reSetIcon() {
+        mImg_a.setImageResource(R.drawable.icon_tabone);
+        mImg_b.setImageResource(R.drawable.icon_tabtwo);
+        mImg_d.setImageResource(R.drawable.icon_tabthree);
+        mImg_e.setImageResource(R.drawable.icon_tabfour);
     }
 
     //重设Title中字体颜色为默认

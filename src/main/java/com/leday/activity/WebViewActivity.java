@@ -1,9 +1,11 @@
 package com.leday.activity;
 
-import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -13,14 +15,13 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import com.leday.R;
-import com.umeng.analytics.MobclickAgent;
+import com.leday.Util.PreferenUtil;
 
-public class WebViewActivity extends Activity {
+public class WebViewActivity extends BaseActivity implements View.OnClickListener {
 
     private WebView mWebView;
-    private TextView mTitle;
 
-    private String localurl, localtitle;
+    private String local_title, local_url;
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -35,18 +36,6 @@ public class WebViewActivity extends Activity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPause(this);
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
@@ -57,16 +46,19 @@ public class WebViewActivity extends Activity {
 
     private void initView() {
         Intent intent = getIntent();
-        localurl = intent.getStringExtra("localurl");
-        localtitle = intent.getStringExtra("localtitle");
+        local_url = intent.getStringExtra("localurl");
+        local_title = intent.getStringExtra("localtitle");
 
+        TextView mLike = (TextView) findViewById(R.id.txt_webview_like);
         mWebView = (WebView) findViewById(R.id.webview_activity);
-        mTitle = (TextView) findViewById(R.id.txt_webview_title);
-        mTitle.setText(localtitle);
+        TextView mTitle = (TextView) findViewById(R.id.txt_webview_title);
+        mTitle.setText(local_title);
+
+        mLike.setOnClickListener(this);
     }
 
     private void initEvent() {
-        mWebView.loadUrl(localurl);
+        mWebView.loadUrl(local_url);
         //JS交互
         mWebView.getSettings().setJavaScriptEnabled(true);
         //支持放缩
@@ -92,5 +84,25 @@ public class WebViewActivity extends Activity {
 
     public void close(View view) {
         finish();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.txt_webview_like:
+                //建一张表保存文章
+                SQLiteDatabase mDatabase = openOrCreateDatabase("leday.db", MODE_PRIVATE, null);
+                mDatabase.execSQL("create table if not exists wechattb(_id integer primary key autoincrement,title text not null,url text not null)");
+                ContentValues mValues = new ContentValues();
+                mValues.put("title", local_title);
+                mValues.put("url", local_url);
+                mDatabase.insert("wechattb", null, mValues);
+                mValues.clear();
+                mDatabase.close();
+                Snackbar.make(view, "收藏成功 : " + local_title, Snackbar.LENGTH_SHORT).show();
+                //权宜之计，做个标识给FavoriteActivity用
+                PreferenUtil.put(WebViewActivity.this, "wechattb_is_exist", "actually_not");
+                break;
+        }
     }
 }

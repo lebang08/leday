@@ -14,9 +14,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-/**
- * Created by Administrator on 2016/6/20.
- */
 public class WechatAdapter extends BaseAdapter {
 
     private List<Wechat> mList;
@@ -64,8 +61,8 @@ public class WechatAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public class ViewHold {
-        public TextView mTitle, mAuthor;
-        public ImageView mImg;
+    private class ViewHold {
+        private TextView mTitle, mAuthor;
+        private ImageView mImg;
     }
 }

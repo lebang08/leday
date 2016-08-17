@@ -3,13 +3,11 @@ package com.leday.activity;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
@@ -17,25 +15,33 @@ import android.view.animation.BounceInterpolator;
 import com.leday.R;
 import com.leday.Util.LogUtil;
 import com.leday.Util.PreferenUtil;
+import com.leday.Util.ToastUtil;
 import com.leday.Util.UpdateUtil;
+import com.leday.application.MyApplication;
 import com.umeng.analytics.MobclickAgent;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener {
 
-    private FloatingActionButton mFab1, mFab2, mFab3;
     private DisplayMetrics mDisplayMetric;
+
+    //用于检测双击退出程序
+    private boolean isFirst = true;
+    private long lastTime;
 
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(this).setTitle("确认退出吗？").setIcon(android.R.drawable.ic_dialog_info)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        PreferenUtil.remove(MainActivity.this, "localVersion");
-                        PreferenUtil.remove(MainActivity.this, "serverVersion");
-                        MainActivity.this.finish();
-                    }
-                }).setNegativeButton("返回", null).show();
+        if (isFirst) {
+            ToastUtil.showMessage(this, "再按一次退出程序");
+            lastTime = System.currentTimeMillis();
+            isFirst = false;
+        } else {
+            if ((System.currentTimeMillis() - lastTime) < 2000) {
+                this.finish();
+            } else {
+                ToastUtil.showMessage(this, "再按一次退出程序");
+                lastTime = System.currentTimeMillis();
+            }
+        }
     }
 
     @Override
@@ -51,18 +57,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        MyApplication.getHttpQueue().cancelAll("updateutil");
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initView();
         new UpdateUtil(this).checkUpdate();
+        initView();
     }
 
     private void initView() {
-        mFab1 = (FloatingActionButton) findViewById(R.id.fab1_activity_main);
-        mFab2 = (FloatingActionButton) findViewById(R.id.fab2_activity_main);
-        mFab3 = (FloatingActionButton) findViewById(R.id.fab3_activity_main);
+        FloatingActionButton mFab1 = (FloatingActionButton) findViewById(R.id.fab1_activity_main);
+        FloatingActionButton mFab2 = (FloatingActionButton) findViewById(R.id.fab2_activity_main);
+        FloatingActionButton mFab3 = (FloatingActionButton) findViewById(R.id.fab3_activity_main);
 
         mFab1.setOnClickListener(this);
         mFab2.setOnClickListener(this);
@@ -79,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void showThankOnce() {
         boolean isThank = PreferenUtil.contains(MainActivity.this, "thankonce");
-        if (isThank == false) {
+        if (!isThank) {
             PreferenUtil.put(MainActivity.this, "thankonce", "20160801");
             new AlertDialog.Builder(MainActivity.this).setTitle("一封简短的感谢信").setMessage(
                     "说心里话，没有美工，功能也暂还很简单的一个应用,\n" +
@@ -133,7 +145,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //抽出方法Snack
     private void ShowSnack(View v, final String content, String color) {
-        Snackbar.make(v, "长按小球2秒进入下一页", Snackbar.LENGTH_LONG).setActionTextColor(Color.parseColor(color)).setAction("或者戳我", new View.OnClickListener() {
+        Snackbar.make(v, "长按小球2秒进入下一页", Snackbar.LENGTH_LONG)
+                .setActionTextColor(Color.parseColor(color))
+                .setAction("或者戳我", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ToTabActivity(content);

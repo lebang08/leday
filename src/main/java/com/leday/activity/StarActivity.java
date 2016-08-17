@@ -1,6 +1,5 @@
 package com.leday.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,32 +15,29 @@ import com.leday.R;
 import com.leday.Util.LogUtil;
 import com.leday.Util.ToastUtil;
 import com.leday.application.MyApplication;
-import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class StarActivity extends Activity implements View.OnClickListener {
+public class StarActivity extends BaseActivity implements View.OnClickListener {
 
-    private ImageView mImge, mImgBack;
-    private TextView mTxt, mTitle;
-    private Button mBtnToday, mBtnWeek, mBtnTomorrow, mBtnNextweek;
+    private ImageView mImge;
+    private TextView mTxt;
 
     private String localstar;
     private String localtime = "today";
-    private static final String URL = "http://web.juhe.cn:8080/constellation/getAll?key=c86828899c7c2b9cd39281ee48f90105&consName=";
-    private int localtimes = 0;
+    private static final String URL_STAR = "http://web.juhe.cn:8080/constellation/getAll?key=c86828899c7c2b9cd39281ee48f90105&consName=";
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onResume(this);
+    protected void onStop() {
+        super.onStop();
+        MyApplication.getHttpQueue().cancelAll("staractivity");
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPause(this);
+    protected void onStart() {
+        super.onStart();
+        getJson();
     }
 
     @Override
@@ -50,7 +46,6 @@ public class StarActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_star);
 
         initView();
-        getJson();
     }
 
     //    初始化控件
@@ -61,13 +56,13 @@ public class StarActivity extends Activity implements View.OnClickListener {
         ToastUtil.showMessage(this, "哇! 快看,是" + localstar + "!");
 
         mImge = (ImageView) findViewById(R.id.img_activity_star);
-        mImgBack = (ImageView) findViewById(R.id.img_star_back);
         mTxt = (TextView) findViewById(R.id.txt_star_content);
-        mTitle = (TextView) findViewById(R.id.txt_star_title);
-        mBtnToday = (Button) findViewById(R.id.btn_star_today);
-        mBtnWeek = (Button) findViewById(R.id.btn_star_week);
-        mBtnTomorrow = (Button) findViewById(R.id.btn_star_tomorrow);
-        mBtnNextweek = (Button) findViewById(R.id.btn_star_nextweek);
+        ImageView mImgBack = (ImageView) findViewById(R.id.img_star_back);
+        TextView mTitle = (TextView) findViewById(R.id.txt_star_title);
+        Button mBtnToday = (Button) findViewById(R.id.btn_star_today);
+        Button mBtnWeek = (Button) findViewById(R.id.btn_star_week);
+        Button mBtnTomorrow = (Button) findViewById(R.id.btn_star_tomorrow);
+        Button mBtnNextweek = (Button) findViewById(R.id.btn_star_nextweek);
 
         mImgBack.setOnClickListener(this);
         mBtnToday.setOnClickListener(this);
@@ -79,6 +74,9 @@ public class StarActivity extends Activity implements View.OnClickListener {
         setImgView(localimgId);
     }
 
+    /**
+     * 设置对应的星座图片
+     */
     private void setImgView(int localimgId) {
         switch (localimgId) {
             case 0:
@@ -121,7 +119,7 @@ public class StarActivity extends Activity implements View.OnClickListener {
     }
 
     private void getJson() {
-        StringRequest starRequest = new StringRequest(Request.Method.GET, URL + localstar + "&type=" + localtime, new Response.Listener<String>() {
+        StringRequest starRequest = new StringRequest(Request.Method.GET, URL_STAR + localstar + "&type=" + localtime, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 DoSuccess(response);
@@ -130,13 +128,9 @@ public class StarActivity extends Activity implements View.OnClickListener {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.e("volleyError = " + volleyError.getMessage());
-                if (localtimes < 3) {
-                    localtimes++;
-                    getJson();
-                }
             }
         });
-        starRequest.setTag("GET");
+        starRequest.setTag("staractivity");
         MyApplication.getHttpQueue().add(starRequest);
     }
 

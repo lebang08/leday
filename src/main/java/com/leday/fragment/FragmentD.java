@@ -6,8 +6,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,20 +17,20 @@ import android.widget.ListView;
 
 import com.leday.Impl.ListViewHightImpl;
 import com.leday.R;
+import com.leday.Util.PreferenUtil;
 import com.leday.Util.ToastUtil;
+import com.leday.Util.UpdateUtil;
 import com.leday.activity.FavoriteActivity;
 import com.leday.activity.TalkActivity;
+import com.leday.activity.WebFavoriteActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentD extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener {
-
-    private FloatingActionButton mFab;
+public class FragmentD extends Fragment implements AdapterView.OnItemClickListener {
 
     private ListView mListView;
     private List<String> mData = new ArrayList<>();
-    private ArrayAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,41 +41,26 @@ public class FragmentD extends Fragment implements AdapterView.OnItemClickListen
     }
 
     private void initView(View view) {
-        mFab = (FloatingActionButton) view.findViewById(R.id.fab_fragment_d);
         mListView = (ListView) view.findViewById(R.id.listview_fragment_d);
-
-        mFab.setOnClickListener(this);
         mListView.setOnItemClickListener(this);
     }
 
     private void initData() {
-        mData.add("我的收藏");
-        mData.add("我没有想到");
-        mData.add("只做了简单小功能的Le");
-        mData.add("能一直获得您的支持");
-        mData.add("非常感谢");
-        mData.add("作为一名程序");
-        mData.add("我会继续把Le送到需要它的地方去");
-        mData.add("关于Le的功能：");
-        mData.add("目前考虑要增加一些功能");
-        mData.add("1.分享内容到微信/微博等社交平台的功能");
-        mData.add("2.继续丰富聊天机器人的查询功能");
-        mData.add("3.作一个吐槽墙");
-        mData.add("4.作一些方块小游戏");
-        mData.add("其实我最希望的是");
-        mData.add("能真正和您交流意见");
-        mData.add("欢迎戳我，或者，本表第一栏");
-        mData.add("我们企鹅见");
+        mData.add("图灵问答机器人");
+        mData.add("今时今往收藏");
+        mData.add("微信微选收藏");
+        mData.add("应用版本号");
+        mData.add("联系开发者");
     }
 
     private void DoEvent() {
         initData();
-        mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, mData);
+        ArrayAdapter mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, mData);
         mListView.setAdapter(mAdapter);
         new ListViewHightImpl(mListView).setListViewHeightBasedOnChildren();
     }
 
-    public static final boolean isApkInstalled(Context context, String packageName) {
+    public static boolean isApkInstalled(Context context, String packageName) {
         try {
             context.getPackageManager().getApplicationInfo(packageName, PackageManager.GET_SHARED_LIBRARY_FILES);
             return true;
@@ -87,50 +70,42 @@ public class FragmentD extends Fragment implements AdapterView.OnItemClickListen
     }
 
     private void talkQQ(boolean isExist) {
-        if (isExist == false) {
+        if (!isExist) {
             ToastUtil.showMessage(getActivity(), "手机安装腾讯QQ才可以对话哦");
-            return;
         } else {
             String urltwo = "mqqwpa://im/chat?chat_type=wpa&uin=443664360";
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(urltwo)));
-            return;
         }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (position == 0) {
-            startActivity(new Intent(getActivity(),FavoriteActivity.class));
-        } else if(position == 15 || position == 16){
-            /**
-             *这两个事件，打开QQ
-             */
-            boolean isExist = isApkInstalled(getActivity(), "com.tencent.mobileqq");
-            talkQQ(isExist);
-        }else{
-            //其余选项事件,前往图灵
-            startActivity(new Intent(getActivity(), TalkActivity.class));
-//            doSnackbar(view, "前往勾搭小图灵", "Go");
-        }
-    }
-
-    //Snack抽出
-    private void doSnackbar(View view, String content, String hint) {
-        Snackbar.make(view, content, Snackbar.LENGTH_SHORT).setActionTextColor(Color.parseColor("#ffffff")).setAction(hint, mySnackOnclick()).show();
-    }
-
-    @Override
-    public void onClick(View v) {
-        doSnackbar(v, "前往勾搭小图灵", "Go");
-    }
-
-    @NonNull
-    private View.OnClickListener mySnackOnclick() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        switch (position) {
+            case 0:
                 startActivity(new Intent(getActivity(), TalkActivity.class));
-            }
-        };
+                break;
+            case 1:
+                startActivity(new Intent(getActivity(), FavoriteActivity.class));
+                break;
+            case 2:
+                startActivity(new Intent(getActivity(), WebFavoriteActivity.class));
+                break;
+            case 3:
+                Snackbar.make(view, "当前版本号是：" + PreferenUtil.get(getActivity(), "localVersion", "1.4"), Snackbar.LENGTH_SHORT)
+                        .setActionTextColor(Color.parseColor("#ffffff"))
+                        .setAction("点击检查新版本", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                new UpdateUtil(getActivity(), "isNew").checkUpdate();
+                            }
+                        }).show();
+                break;
+            case 4:
+                boolean isExist = isApkInstalled(getActivity(), "com.tencent.mobileqq");
+                talkQQ(isExist);
+                break;
+            default:
+                break;
+        }
     }
 }

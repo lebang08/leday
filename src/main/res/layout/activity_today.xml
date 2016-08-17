@@ -24,8 +24,8 @@
 
         <ImageView
             android:id="@+id/img_today_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="8dp"
             android:src="@drawable/arrow_white_back" />
@@ -50,15 +50,17 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/viewflipper_activity_today"
         android:layout_marginTop="16dp">
 
         <TextView
             android:id="@+id/content_activity_today"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:paddingBottom="16dp"
+            android:paddingTop="8dp"
             android:textIsSelectable="true"
             android:textSize="18sp" />
-
     </ScrollView>
 </LinearLayout>
