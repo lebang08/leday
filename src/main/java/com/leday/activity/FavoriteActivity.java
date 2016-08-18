@@ -47,7 +47,7 @@ public class FavoriteActivity extends BaseActivity implements AdapterView.OnItem
         }
         mDatabase = openOrCreateDatabase("leday.db", MODE_PRIVATE, null);
         //数据库查询
-        Cursor mCursor = mDatabase.query("todaytb", null, "_id>?", new String[]{"0"}, null, null, null);
+        Cursor mCursor = mDatabase.query("todaytb", null, "_id>?", new String[]{"0"}, null, null, "_id");
         if (mCursor != null) {
             String local_date_title;
             while (mCursor.moveToNext()) {

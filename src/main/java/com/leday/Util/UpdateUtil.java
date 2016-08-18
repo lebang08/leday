@@ -149,7 +149,7 @@ public class UpdateUtil {
     private void showNoticeDialog() {     //show 弹窗供选择是否更新
         AlertDialog.Builder builder = new Builder(mcontext, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
         builder.setTitle("发现新版本");
-//        builder.setMessage(mMessage);
+        builder.setMessage("小Le更新啦！\n又增加了新功能，赶快更新试试吧！");
         builder.setPositiveButton("更新", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

@@ -11,7 +11,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.baidu.appx.BDBannerAd;
+import com.baidu.appx.BDInterstitialAd;
+import com.baidu.appx.BDSplashAd;
 import com.leday.R;
+import com.leday.Util.LogUtil;
 import com.leday.Util.ToastUtil;
 import com.leday.Util.UpdateUtil;
 import com.leday.fragment.FragmentA;
@@ -23,6 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TabActivity extends AppCompatActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
+
+    private BDSplashAd splashAd;
+    private String SDK_APP_KEY = "N5Q9a1aXalqHCEq2GG1DeZN4GTzewsNs";
+    private String SDK_SPLASH_AD_ID = "naPtaeihvie9NR1jzjWRDjTO";
 
     private ViewPager mViewPager;
     private List<Fragment> mFragmentList;
@@ -51,6 +59,14 @@ public class TabActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     @Override
+    protected void onDestroy() {
+        if (splashAd != null) {
+            splashAd.destroy();
+        }
+        super.onDestroy();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
@@ -59,6 +75,15 @@ public class TabActivity extends AppCompatActivity implements View.OnClickListen
         new UpdateUtil(this).checkUpdate();
         initTab();
         initView();
+
+        //创建开屏广告
+        createSplashAd();
+        if (splashAd.isLoaded()) {
+            splashAd.showAd();
+        } else {
+            LogUtil.e("TabActivity---- splash ad is not ready");
+            splashAd.loadAd();
+        }
     }
 
     private void initView() {
@@ -190,5 +215,56 @@ public class TabActivity extends AppCompatActivity implements View.OnClickListen
         mTxt_b.setTextColor(Color.parseColor("#707070"));
         mTxt_d.setTextColor(Color.parseColor("#707070"));
         mTxt_e.setTextColor(Color.parseColor("#707070"));
+    }
+
+
+    /**
+     * 百度开屏广告
+     */
+    private void createSplashAd() {
+        if (splashAd == null) {
+            LogUtil.e("what?", "0");
+            splashAd = new BDSplashAd(TabActivity.this, SDK_APP_KEY, SDK_SPLASH_AD_ID);
+            splashAd.setAdListener(new AdListener("Splash"));
+        }
+    }
+
+    private class AdListener implements BDBannerAd.BannerAdListener, BDInterstitialAd.InterstitialAdListener,
+            BDSplashAd.SplashAdListener {
+        private String stringTag;
+
+        public AdListener(String tag) {
+            this.stringTag = tag;
+        }
+
+        @Override
+        public void onAdvertisementDataDidLoadFailure() {
+            LogUtil.e(stringTag, "    ad did load failure");
+        }
+
+        @Override
+        public void onAdvertisementDataDidLoadSuccess() {
+            LogUtil.e(stringTag, "    ad did load success");
+        }
+
+        @Override
+        public void onAdvertisementViewDidClick() {
+            LogUtil.e(stringTag, "    ad view did click");
+        }
+
+        @Override
+        public void onAdvertisementViewDidShow() {
+            LogUtil.e(stringTag, "    ad view did show");
+        }
+
+        @Override
+        public void onAdvertisementViewWillStartNewIntent() {
+            LogUtil.e(stringTag, "    ad view will new intent");
+        }
+
+        @Override
+        public void onAdvertisementViewDidHide() {
+            LogUtil.e(stringTag, "    ad view did hide");
+        }
     }
 }

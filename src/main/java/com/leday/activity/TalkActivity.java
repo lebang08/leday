@@ -95,7 +95,7 @@ public class TalkActivity extends BaseActivity {
             // 此处应该调入数据库
             SQLiteDatabase mDatabase = openOrCreateDatabase("leday.db", MODE_PRIVATE, null);
             //数据库查询
-            Cursor mCursor = mDatabase.query("talktb", null, "_id>?", new String[]{"0"}, null, null, "message");
+            Cursor mCursor = mDatabase.query("talktb", null, "_id>?", new String[]{"0"}, null, null, "_id");
             if (mCursor != null) {
                 String[] columns = mCursor.getColumnNames();
                 while (mCursor.moveToNext()) {

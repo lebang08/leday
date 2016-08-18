@@ -12,49 +12,22 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 
+import com.baidu.appx.BDBannerAd;
+import com.baidu.appx.BDInterstitialAd;
+import com.baidu.appx.BDSplashAd;
 import com.leday.R;
 import com.leday.Util.LogUtil;
 import com.leday.Util.PreferenUtil;
-import com.leday.Util.ToastUtil;
 import com.leday.Util.UpdateUtil;
 import com.leday.application.MyApplication;
-import com.umeng.analytics.MobclickAgent;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener {
 
     private DisplayMetrics mDisplayMetric;
 
-    //用于检测双击退出程序
-    private boolean isFirst = true;
-    private long lastTime;
-
-    @Override
-    public void onBackPressed() {
-        if (isFirst) {
-            ToastUtil.showMessage(this, "再按一次退出程序");
-            lastTime = System.currentTimeMillis();
-            isFirst = false;
-        } else {
-            if ((System.currentTimeMillis() - lastTime) < 2000) {
-                this.finish();
-            } else {
-                ToastUtil.showMessage(this, "再按一次退出程序");
-                lastTime = System.currentTimeMillis();
-            }
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPause(this);
-    }
+    private BDSplashAd splashAd;
+    public static final String SDK_APP_KEY = "N5Q9a1aXalqHCEq2GG1DeZN4GTzewsNs";
+    private static final String SDK_SPLASH_AD_ID = "naPtaeihvie9NR1jzjWRDjTO";
 
     @Override
     protected void onStop() {
@@ -175,5 +148,86 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         Intent intent = new Intent(MainActivity.this, TabActivity.class);
         intent.putExtra("content", content);
         startActivity(intent);
+    }
+
+    /**
+     * 以下是百度集成广告
+     * @param view
+     */
+    public void clickone(View view) {
+        createSplashAd();
+        LogUtil.e("what1?", "1");
+    }
+
+    public void clicktwo(View view) {
+        // 如果本地无广告可用，需要下载广告，待下次启动使用
+        if (!splashAd.isLoaded()) {
+            LogUtil.e("what2?", "2");
+            splashAd.loadAd();
+        }
+    }
+
+    public void clickthree(View view) {
+        LogUtil.e("what3?", "3");
+        // 展示开屏广告
+        if (splashAd.isLoaded()) {
+            splashAd.showAd();
+        }
+    }
+
+    public void clickfour(View view) {
+        // 销毁广告对象
+        if (splashAd != null) {
+            LogUtil.e("what4?", "4");
+            splashAd.destroy();
+            splashAd = null;
+        }
+    }
+
+    private void createSplashAd() {
+        if (splashAd == null) {
+            LogUtil.e("what?", "0");
+            splashAd = new BDSplashAd(this, SDK_APP_KEY, SDK_SPLASH_AD_ID);
+            splashAd.setAdListener(new AdListener("Splash"));
+        }
+    }
+
+    private class AdListener implements BDBannerAd.BannerAdListener, BDInterstitialAd.InterstitialAdListener,
+            BDSplashAd.SplashAdListener {
+        private String stringTag;
+
+        public AdListener(String tag) {
+            this.stringTag = tag;
+        }
+
+        @Override
+        public void onAdvertisementDataDidLoadFailure() {
+            LogUtil.e(stringTag, "    ad did load failure");
+        }
+
+        @Override
+        public void onAdvertisementDataDidLoadSuccess() {
+            LogUtil.e(stringTag, "    ad did load success");
+        }
+
+        @Override
+        public void onAdvertisementViewDidClick() {
+            LogUtil.e(stringTag, "    ad view did click");
+        }
+
+        @Override
+        public void onAdvertisementViewDidShow() {
+            LogUtil.e(stringTag, "    ad view did show");
+        }
+
+        @Override
+        public void onAdvertisementViewWillStartNewIntent() {
+            LogUtil.e(stringTag, "    ad view will new intent");
+        }
+
+        @Override
+        public void onAdvertisementViewDidHide() {
+            LogUtil.e(stringTag, "    ad view did hide");
+        }
     }
 }

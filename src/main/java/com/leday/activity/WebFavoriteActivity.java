@@ -47,7 +47,7 @@ public class WebFavoriteActivity extends BaseActivity implements AdapterView.OnI
         }
         mDatabase = openOrCreateDatabase("leday.db", MODE_PRIVATE, null);
         //数据库查询
-        Cursor mCursor = mDatabase.query("wechattb", null, "_id>?", new String[]{"0"}, null, null, null);
+        Cursor mCursor = mDatabase.query("wechattb", null, "_id>?", new String[]{"0"}, null, null, "_id");
         if (mCursor != null) {
             String local_date_title;
             while (mCursor.moveToNext()) {
