@@ -45,9 +45,17 @@ public class FragmentD extends Fragment implements AdapterView.OnItemClickListen
 
     @Override
     public void onStart() {
-        //创建百度插屏View
-        interstitialAd = new BDInterstitialAd(getActivity(), SDK_APP_KEY, SDK_INTERSTITIAL_AD_ID);
-        interstitialAd.setAdListener(new AdListener("Interstitial"));
+        //下载插屏
+        if (null == interstitialAd) {
+            interstitialAd = new BDInterstitialAd(getActivity(), SDK_APP_KEY, SDK_INTERSTITIAL_AD_ID);
+            interstitialAd.setAdListener(new AdListener("Interstitial"));
+        }
+        interstitialAd.loadAd();
+        // 如果本地无广告可用，需要下载广告，待下次启动使用
+        createSplashAd();
+        if (!splashAd.isLoaded()) {
+            splashAd.loadAd();
+        }
         super.onStart();
     }
 
