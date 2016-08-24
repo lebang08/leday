@@ -76,12 +76,9 @@ public class TabActivity extends AppCompatActivity implements View.OnClickListen
         initTab();
         initView();
 
-        //创建开屏广告
+        //创建开屏广告并下载
         createSplashAd();
-        if (splashAd.isLoaded()) {
-            splashAd.showAd();
-        } else {
-            LogUtil.e("TabActivity---- splash ad is not ready");
+        if (!splashAd.isLoaded()) {
             splashAd.loadAd();
         }
     }
@@ -223,7 +220,6 @@ public class TabActivity extends AppCompatActivity implements View.OnClickListen
      */
     private void createSplashAd() {
         if (splashAd == null) {
-            LogUtil.e("what?", "0");
             splashAd = new BDSplashAd(TabActivity.this, SDK_APP_KEY, SDK_SPLASH_AD_ID);
             splashAd.setAdListener(new AdListener("Splash"));
         }

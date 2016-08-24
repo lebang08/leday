@@ -15,11 +15,25 @@ import com.leday.Util.PreferenUtil;
 
 import java.util.ArrayList;
 
-public class FavoriteActivity extends BaseActivity implements AdapterView.OnItemClickListener{
+public class FavoriteActivity extends BaseActivity implements AdapterView.OnItemClickListener {
+
+    private ListView mListView;
+    private ArrayAdapter mAdapter;
 
     private ArrayList<String> mDataList = new ArrayList<>();
     private ArrayList<String> mContentList = new ArrayList<>();
+    private ArrayList<String> mIdList = new ArrayList<>();
     private SQLiteDatabase mDatabase;
+
+    @Override
+    protected void onRestart() {
+        mDataList.clear();
+        mAdapter.notifyDataSetChanged();
+        queryDatabase();
+        mAdapter = new ArrayAdapter(FavoriteActivity.this, android.R.layout.simple_list_item_1, mDataList);
+        mListView.setAdapter(mAdapter);
+        super.onRestart();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +45,8 @@ public class FavoriteActivity extends BaseActivity implements AdapterView.OnItem
     }
 
     private void initView() {
-        ListView mListView = (ListView) findViewById(R.id.listview_activity_favoriter);
-        ArrayAdapter mAdapter = new ArrayAdapter(FavoriteActivity.this, android.R.layout.simple_list_item_1, mDataList);
+        mListView = (ListView) findViewById(R.id.listview_activity_favoriter);
+        mAdapter = new ArrayAdapter(FavoriteActivity.this, android.R.layout.simple_list_item_1, mDataList);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
     }
@@ -42,7 +56,7 @@ public class FavoriteActivity extends BaseActivity implements AdapterView.OnItem
 //        if (!tabIsExist("todaytb")) {
 //            return;
 //        }
-        if(!PreferenUtil.contains(FavoriteActivity.this,"todaytb_is_exist")){
+        if (!PreferenUtil.contains(FavoriteActivity.this, "todaytb_is_exist")) {
             return;
         }
         mDatabase = openOrCreateDatabase("leday.db", MODE_PRIVATE, null);
@@ -55,6 +69,7 @@ public class FavoriteActivity extends BaseActivity implements AdapterView.OnItem
                         + mCursor.getString(mCursor.getColumnIndex("title"));
                 mDataList.add(local_date_title);
                 mContentList.add(mCursor.getString(mCursor.getColumnIndex("content")));
+                mIdList.add(mCursor.getString(mCursor.getColumnIndex("_id")));
             }
             mCursor.close();
         }
@@ -95,9 +110,10 @@ public class FavoriteActivity extends BaseActivity implements AdapterView.OnItem
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Intent intent = new Intent(FavoriteActivity.this,FavoriteDetailActivity.class);
-        intent.putExtra("local_date_title",mDataList.get(i));
-        intent.putExtra("local_content",mContentList.get(i));
+        Intent intent = new Intent(FavoriteActivity.this, FavoriteDetailActivity.class);
+        intent.putExtra("local_date_title", mDataList.get(i));
+        intent.putExtra("local_content", mContentList.get(i));
+        intent.putExtra("local_id", mIdList.get(i));
         startActivity(intent);
     }
 }

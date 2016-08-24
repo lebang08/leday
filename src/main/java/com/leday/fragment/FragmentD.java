@@ -46,11 +46,9 @@ public class FragmentD extends Fragment implements AdapterView.OnItemClickListen
     @Override
     public void onStart() {
         //下载插屏
-        if (null == interstitialAd) {
-            interstitialAd = new BDInterstitialAd(getActivity(), SDK_APP_KEY, SDK_INTERSTITIAL_AD_ID);
-            interstitialAd.setAdListener(new AdListener("Interstitial"));
-        }
+        createInitAd();
         interstitialAd.loadAd();
+
         // 如果本地无广告可用，需要下载广告，待下次启动使用
         createSplashAd();
         if (!splashAd.isLoaded()) {
@@ -92,6 +90,7 @@ public class FragmentD extends Fragment implements AdapterView.OnItemClickListen
         mData.add("查看版本号");
         mData.add("联系开发者");
         mData.add("小Le推荐");
+        mData.add("小Le广告");
         ArrayAdapter mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, mData);
         mListView.setAdapter(mAdapter);
         new ListViewHightImpl(mListView).setListViewHeightBasedOnChildren();
@@ -159,25 +158,22 @@ public class FragmentD extends Fragment implements AdapterView.OnItemClickListen
                 if (null == interstitialAd || !interstitialAd.isLoaded()) {
                     LogUtil.e("---- interstitialAd is not ready ----");
                     //下载插屏
-                    if (null == interstitialAd) {
-                        interstitialAd = new BDInterstitialAd(getActivity(), SDK_APP_KEY, SDK_INTERSTITIAL_AD_ID);
-                        interstitialAd.setAdListener(new AdListener("Interstitial"));
-                    }
+                    createInitAd();
                     interstitialAd.loadAd();
-                    interstitialAd.showAd();
-                    // 如果本地无广告可用，需要下载广告，待下次启动使用
-                    createSplashAd();
-                    if (!splashAd.isLoaded()) {
-                        splashAd.loadAd();
-                    }
                 } else {
                     LogUtil.e("---- interstitialAd start to show ----");
                     interstitialAd.showAd();
-                    // 如果本地无广告可用，需要下载广告，待下次启动使用
-                    createSplashAd();
-                    if (!splashAd.isLoaded()) {
-                        splashAd.loadAd();
-                    }
+                }
+                break;
+            case 6:
+                //创建开屏广告
+                if (!splashAd.isLoaded()) {
+                    LogUtil.e("FramentD---- splash ad is ready to show");
+                    Snackbar.make(view,"现在没有好的广告呢，亲",Snackbar.LENGTH_SHORT).show();
+                    splashAd.loadAd();
+                } else {
+                    LogUtil.e("FramentD---- splash ad is not ready now loading");
+                    splashAd.showAd();
                 }
                 break;
             default:
@@ -185,9 +181,15 @@ public class FragmentD extends Fragment implements AdapterView.OnItemClickListen
         }
     }
 
+    private void createInitAd() {
+        if (interstitialAd == null) {
+            interstitialAd = new BDInterstitialAd(getActivity(), SDK_APP_KEY, SDK_INTERSTITIAL_AD_ID);
+            interstitialAd.setAdListener(new AdListener("Interstitial"));
+        }
+    }
+
     private void createSplashAd() {
         if (splashAd == null) {
-            LogUtil.e("tab4? + splashAd");
             splashAd = new BDSplashAd(getActivity(), SDK_APP_KEY, SDK_SPLASH_AD_ID);
             splashAd.setAdListener(new AdListener("Splash"));
         }
