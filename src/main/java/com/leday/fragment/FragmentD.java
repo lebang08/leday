@@ -199,7 +199,7 @@ public class FragmentD extends Fragment implements AdapterView.OnItemClickListen
             BDSplashAd.SplashAdListener {
         private String stringTag;
 
-        public AdListener(String tag) {
+        AdListener(String tag) {
             this.stringTag = tag;
         }
 

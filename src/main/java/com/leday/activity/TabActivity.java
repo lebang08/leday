@@ -11,11 +11,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.baidu.appx.BDBannerAd;
-import com.baidu.appx.BDInterstitialAd;
-import com.baidu.appx.BDSplashAd;
 import com.leday.R;
-import com.leday.Util.LogUtil;
+import com.leday.Util.NetUtil;
 import com.leday.Util.ToastUtil;
 import com.leday.Util.UpdateUtil;
 import com.leday.fragment.FragmentA;
@@ -63,6 +60,14 @@ public class TabActivity extends AppCompatActivity implements View.OnClickListen
         new UpdateUtil(this).checkUpdate();
         initTab();
         initView();
+
+        //检查网络
+        if (!NetUtil.isConnected(TabActivity.this)) {
+            ToastUtil.showMessage(TabActivity.this, "亲，你没有连接网络哦");
+        }
+        if(!NetUtil.isWifi(TabActivity.this)){
+            ToastUtil.showMessage(TabActivity.this, "亲，你不在WIFI网络哦");
+        }
     }
 
     private void initView() {

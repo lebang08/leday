@@ -147,6 +147,9 @@ public class UpdateUtil {
     @SuppressLint("InlinedApi")
     @SuppressWarnings("deprecation")
     private void showNoticeDialog() {     //show 弹窗供选择是否更新
+        if(!NetUtil.isWifi(mcontext)){
+            ToastUtil.showMessage(mcontext,"你当前不在WIFI环境，将耗费4.3M流量下载，建议在WIFI环境下下载哦",3000);
+        }
         AlertDialog.Builder builder = new Builder(mcontext, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
         builder.setTitle("发现新版本");
         builder.setMessage("小Le更新啦！\n又增加了新功能，赶快更新试试吧！");
@@ -197,8 +200,7 @@ public class UpdateUtil {
             public void run() {
                 try {
                     if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                        String sdPath = Environment.getExternalStorageDirectory() + "/";// sd卡根目录
-                        mSavePath = sdPath + "le";
+                        mSavePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/leday/";
 
                         File dir = new File(mSavePath);
                         if (!dir.exists()) {
