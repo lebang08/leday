@@ -35,7 +35,6 @@ public class TalkActivity extends BaseActivity {
     private TalkAdapter mAdapter;
     private List<Talk> mDatas;
 
-    //TODO 数据库乱序，原因应该是数据库语法不熟悉，查询/新增/修改优化
     private Handler mHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             //等待接收，子线程完成数据的返回

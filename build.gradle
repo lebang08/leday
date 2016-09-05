@@ -27,12 +27,12 @@ allprojects {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
     compile files('libs/volley.jar')
+    compile project(':BDIntegrationSDK_Lib')
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.android.support:appcompat-v7:24.1.1'
-    compile 'com.android.support:design:24.1.1'
-    compile 'com.android.support:support-v4:24.1.1'
-    compile project(':BDIntegrationSDK_Lib')
+    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'com.android.support:design:24.2.0'
+    compile 'com.android.support:support-v4:24.2.0'
+    testCompile 'junit:junit:4.12'
 }

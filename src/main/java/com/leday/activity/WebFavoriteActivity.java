@@ -28,6 +28,8 @@ public class WebFavoriteActivity extends BaseActivity implements AdapterView.OnI
     @Override
     protected void onRestart() {
         mDataList.clear();
+        mContentList.clear();
+        mIdList.clear();
         mAdapter.notifyDataSetChanged();
         queryDatabase();
         mAdapter = new ArrayAdapter(WebFavoriteActivity.this, android.R.layout.simple_list_item_1, mDataList);
@@ -86,8 +88,8 @@ public class WebFavoriteActivity extends BaseActivity implements AdapterView.OnI
         if (tabName == null) {
             return false;
         }
-        Cursor cursor;
         try {
+            Cursor cursor;
             String sql = "select count(*) as c from sqlite_master where type ='table' and name ='" + tabName + "'";
             cursor = mDatabase.rawQuery(sql, null);
             LogUtil.e("what1? ");

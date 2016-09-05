@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /><!-- cuid需要write settings -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- cuid需要write settings -->
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <application
@@ -19,13 +19,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.AnimationActivity"
-            android:label="@string/app_name"
+            android:name=".activity.SplashActivity"
             android:theme="@style/Theme.Design.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.AnimationActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Design.Light.NoActionBar">
         </activity>
         <activity
             android:name=".activity.MainActivity"
@@ -42,10 +47,9 @@
         <activity android:name=".activity.WebFavoriteActivity" />
         <activity android:name=".activity.FavoriteDetailActivity" />
         <activity android:name=".activity.WebFavoriteDetailActivity" />
-
         <activity
             android:name="com.baidu.appx.uikit.BDActivity"
-            android:configChanges="orientation|screenSize"/>
+            android:configChanges="orientation|screenSize" />
 
         <receiver android:name="com.baidu.appx.app_download.CompleteReceiver">
             <intent-filter>
@@ -54,10 +58,10 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
+
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
-
         //百度API
         <meta-data
             android:name="BDAPPID"
@@ -65,14 +69,13 @@
         <meta-data
             android:name="BDAPPKEY"
             android:value="N5Q9a1aXalqHCEq2GG1DeZN4GTzewsNs" />
-
         //友盟API
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="579eadc267e58ed31f0009b8" />
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="Baidu" />
+            android:value="meizu" />
     </application>
 
 </manifest>
