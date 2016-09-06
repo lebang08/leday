@@ -35,12 +35,12 @@ public class SplashActivity extends Activity implements View.OnClickListener {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == MSG_COUNT) {
-                mTitle.setText("倒计时" + msg.obj + "秒");
+                mTitle.setText( msg.obj + "秒");
                 if (splashAd.isLoaded() && isFirst == true) {
                     splashAd.showAd();
                     isFirst = false;
-                    mTitle.setVisibility(View.GONE);
-                    mTxtPass.setVisibility(View.GONE);
+//                    mTitle.setVisibility(View.GONE);
+//                    mTxtPass.setVisibility(View.GONE);
 //                    findViewById(R.id.img_activity_splash).setVisibility(View.GONE);
                 }
                 if ((int) msg.obj == 0) {
@@ -51,23 +51,6 @@ public class SplashActivity extends Activity implements View.OnClickListener {
             }
         }
     };
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //自己的开屏
-        count = 5;
-        mTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                Message msg = Message.obtain();
-                count = count - 1;
-                msg.what = MSG_COUNT;
-                msg.obj = count;
-                mHandler.sendMessage(msg);
-            }
-        }, 100, 1000);
-    }
 
     @Override
     protected void onDestroy() {
@@ -87,6 +70,19 @@ public class SplashActivity extends Activity implements View.OnClickListener {
         //创建开屏广告并下载
         createSplashAd();
         splashAd.loadAd();
+
+        //自己的开屏
+        count = 8;
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Message msg = Message.obtain();
+                count = count - 1;
+                msg.what = MSG_COUNT;
+                msg.obj = count;
+                mHandler.sendMessage(msg);
+            }
+        }, 100, 1000);
     }
 
     private void initView() {

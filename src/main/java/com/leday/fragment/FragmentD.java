@@ -40,20 +40,14 @@ public class FragmentD extends Fragment implements AdapterView.OnItemClickListen
     private BDSplashAd splashAd;
     private BDInterstitialAd interstitialAd;
     private String SDK_APP_KEY = "N5Q9a1aXalqHCEq2GG1DeZN4GTzewsNs";
-    private String SDK_SPLASH_AD_ID = "naPtaeihvie9NR1jzjWRDjTO";
     private String SDK_INTERSTITIAL_AD_ID = "zkGLtPZvA7uZE6YG2B07QVIO";
+//    private String SDK_SPLASH_AD_ID = "naPtaeihvie9NR1jzjWRDjTO";
 
     @Override
     public void onStart() {
         //下载插屏
         createInitAd();
         interstitialAd.loadAd();
-
-        // 如果本地无广告可用，需要下载广告，待下次启动使用
-        createSplashAd();
-        if (!splashAd.isLoaded()) {
-            splashAd.loadAd();
-        }
         super.onStart();
     }
 
@@ -90,7 +84,7 @@ public class FragmentD extends Fragment implements AdapterView.OnItemClickListen
         mData.add("查看版本号");
         mData.add("联系开发者");
         mData.add("小Le推荐");
-        mData.add("小Le广告");
+//        mData.add("小Le广告");
         ArrayAdapter mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, mData);
         mListView.setAdapter(mAdapter);
         new ListViewHightImpl(mListView).setListViewHeightBasedOnChildren();
@@ -165,19 +159,17 @@ public class FragmentD extends Fragment implements AdapterView.OnItemClickListen
                     interstitialAd.showAd();
                 }
                 break;
-            case 6:
-                //创建开屏广告
-                if (!splashAd.isLoaded()) {
-                    LogUtil.e("FramentD---- splash ad is ready to show");
-                    Snackbar.make(view,"现在没有好的广告呢，亲",Snackbar.LENGTH_SHORT).show();
-                    splashAd.loadAd();
-                } else {
-                    LogUtil.e("FramentD---- splash ad is not ready now loading");
-                    splashAd.showAd();
-                }
-                break;
-            default:
-                break;
+//            case 6:
+//                //创建开屏广告
+//                if (!splashAd.isLoaded()) {
+//                    LogUtil.e("FramentD---- splash ad is ready to show");
+//                    Snackbar.make(view,"现在没有好的广告呢，亲",Snackbar.LENGTH_SHORT).show();
+//                    splashAd.loadAd();
+//                } else {
+//                    LogUtil.e("FramentD---- splash ad is not ready now loading");
+//                    splashAd.showAd();
+//                }
+//                break;
         }
     }
 
@@ -188,12 +180,12 @@ public class FragmentD extends Fragment implements AdapterView.OnItemClickListen
         }
     }
 
-    private void createSplashAd() {
-        if (splashAd == null) {
-            splashAd = new BDSplashAd(getActivity(), SDK_APP_KEY, SDK_SPLASH_AD_ID);
-            splashAd.setAdListener(new AdListener("Splash"));
-        }
-    }
+//    private void createSplashAd() {
+//        if (splashAd == null) {
+//            splashAd = new BDSplashAd(getActivity(), SDK_APP_KEY, SDK_SPLASH_AD_ID);
+//            splashAd.setAdListener(new AdListener("Splash"));
+//        }
+//    }
 
     private class AdListener implements BDBannerAd.BannerAdListener, BDInterstitialAd.InterstitialAdListener,
             BDSplashAd.SplashAdListener {
